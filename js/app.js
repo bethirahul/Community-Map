@@ -1,27 +1,25 @@
 
-var Place = function(name, {lat, lng}, description)
+var Place = function(id, name, {lat, lng}, description)
 {
     var self = this;
 
+    self.id = id;
     self.name = name;
     self.location = {lat, lng};
     self.marker = new google.maps.Marker(
         {
+            id: self.id,
             position: self.location,
             map: map,
-            title: self.name
+            title: self.name,
+            animation: google.maps.Animation.DROP
         }
     );
     self.description = description;
     
     self.marker.addListener(
         'click',
-        function()
-        {
-            infoWindow.setContent(self.description);
-            infoWindow.open(map, self.marker);
-            console.log("Info window content set and opened");
-        }
+        function() { set_InfoWindow(this, self.description); }
     )
 }
 
@@ -43,14 +41,17 @@ function createPlaces()
             {
                 //console.log(json_data.Places[i])
                 var new_place = new Place(
+                    i,
                     json_data.Places[i].name,
                     json_data.Places[i].location,
                     json_data.Places[i].description
                 )
                 places.push(new_place);
+                bounds.extend(new_place.location);
             }
             console.log("Created Places:");
             print_places();
+            map.fitBounds(bounds);
         }
     );
 }

@@ -1,7 +1,8 @@
 var map;
 var infoWindow;
+var bounds;
 
-var home_loc = { lat: 37.635667, lng: -122.218386 }
+var center = { lat: 37.635667, lng: -122.218386 }
 
 function initMap()
 {
@@ -10,14 +11,40 @@ function initMap()
     map = new google.maps.Map(
         document.getElementById('map'),
         {
-            center: home_loc,
-            zoom: 10
+            center: center,
+            zoom: 13
         }
     );
+    map.addListener('click', close_infoWindow);
 
+    // Create an infoWindow
     infoWindow = new google.maps.InfoWindow();
+
+    // Create Bounds
+    bounds = new google.maps.LatLngBounds();
     
     console.log("Created Google Maps");
 
     createPlaces();
+}
+
+function set_InfoWindow(marker, content)
+{
+    // To stop setting and opening info window if already open at the same
+    // marker
+    if(infoWindow.marker != marker)
+    {
+        // Set infoWindow content and open
+        infoWindow.marker = marker;
+        infoWindow.setContent(content);
+        infoWindow.open(map, marker);
+        // To close the infoWindow
+        infoWindow.addListener('closeclick', close_infoWindow);
+    }
+}
+
+function close_infoWindow()
+{
+    infoWindow.marker = null;
+    infoWindow.close();
 }
