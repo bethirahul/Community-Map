@@ -1,7 +1,7 @@
 var map;
 var infoWindow;
 
-var home_loc = { lat: 37.402365, lng: -121.9275 }
+var home_loc = { lat: 37.635667, lng: -122.218386 }
 
 function initMap()
 {
@@ -11,7 +11,7 @@ function initMap()
         document.getElementById('map'),
         {
             center: home_loc,
-            zoom: 13
+            zoom: 10
         }
     );
 

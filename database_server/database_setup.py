@@ -61,4 +61,5 @@ engine = create_engine(
 #   new tables
 Base.metadata.create_all(engine)
 
-# print("Database setup: completed")
+if __name__ == '__main__':
+    print("Database setup: completed")

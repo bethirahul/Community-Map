@@ -1,15 +1,15 @@
 
-var place = function(name, {lat, lng}, description)
+var Place = function(name, {lat, lng}, description)
 {
     var self = this;
 
     self.name = name;
-    self.loc = {lat, lng};
+    self.location = {lat, lng};
     self.marker = new google.maps.Marker(
         {
-            position: this.loc,
+            position: self.location,
             map: map,
-            title: this.name
+            title: self.name
         }
     );
     self.description = description;
@@ -25,15 +25,45 @@ var place = function(name, {lat, lng}, description)
     )
 }
 
-var millValley;
+var places = [];
 
 function createPlaces()
 {
-    millValley = new place(
-        'Mill Valley',
-        {lat: 37.884065, lng: -122.530635},
-        'This place is generally called Mill Valley'
+    fetch("http://localhost:8000/places/json")
+    .then(
+        function(data)
+        {
+            return data.json();
+        }
+    )
+    .then(
+        function(json_data)
+        {
+            for(var i=0; i<json_data.Places.length; i++)
+            {
+                //console.log(json_data.Places[i])
+                var new_place = new Place(
+                    json_data.Places[i].name,
+                    json_data.Places[i].location,
+                    json_data.Places[i].description
+                )
+                places.push(new_place);
+            }
+            console.log("Created Places:");
+            print_places();
+        }
     );
-    console.log("Created Places:");
-    console.log(millValley.name, millValley.loc. millValley.description);
+}
+
+function print_places()
+{
+    for(var i=0; i<places.length; i++)
+    {
+        result = {
+            name: places[i].name,
+            location: places[i].location,
+            description: places[i].description
+        };
+        console.log(result);
+    }
 }

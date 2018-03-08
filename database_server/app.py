@@ -17,9 +17,12 @@ from database_setup import Base, Place
 # This is to get dynamic loading of url_for while Flask renders templates
 import os
 
+from flask_cors import CORS
+
 
 # First set Flask app
 app = Flask(__name__)
+CORS(app)
 
 user = json.loads(
         open('secrets.json', 'r').read()
