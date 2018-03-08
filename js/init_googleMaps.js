@@ -1,4 +1,5 @@
 var map;
+var infoWindow;
 
 var home_loc = { lat: 37.402365, lng: -121.9275 }
 
@@ -13,6 +14,9 @@ function initMap()
             zoom: 13
         }
     );
+
+    infoWindow = new google.maps.InfoWindow();
+    
     console.log("Created Google Maps");
 
     createPlaces();
