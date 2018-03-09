@@ -22,7 +22,7 @@ from flask_cors import CORS
 
 # First set Flask app
 app = Flask(__name__)
-CORS(app)
+#CORS(app)
 
 user = json.loads(
         open('secrets.json', 'r').read()
