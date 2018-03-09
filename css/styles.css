@@ -30,7 +30,7 @@ html, body, div, h1, h3
 
 #toggle-markers-btn
 {
-    top: 3mm;
+    bottom: 3mm;
     left: 3mm;
 }
 

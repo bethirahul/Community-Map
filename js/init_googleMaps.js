@@ -11,9 +11,15 @@ function initMap()
 {
     // Google Maps Styling
     // Takes default values if not all values are given or even empty
-    var styles = [
-
-    ];
+    var my_styledMapType = new google.maps.StyledMapType(
+        [
+            {
+                featureType: 'water',
+                stylers : [{ color: '#0061ff' }]
+            }
+        ],
+        { name: 'Styled' }
+    );
 
     // Creates Google Maps at the DOM element which has an id map; with
     // Latitude and Longitude for center and Zoom level (0-21) for area.
@@ -23,11 +29,26 @@ function initMap()
             center: center,
             zoom: 13,
             // Optional
-            styles: styles,
-            // Optional: To disable Map, Satellite buttons, true by default
-            mapTypeControl: false
+            //styles: styles,
+            // Optional: To disable [Map,Satellite,..] buttons, true by default
+            mapTypeControl: true,
+            // Optional: For extra map types or restrict them
+            mapTypeControlOptions: {
+                mapTypeIds: [
+                    'roadmap',
+                    'satellite',
+                    'hybrid',
+                    'terrain',
+                    'my_style'
+                ]
+            }
         }
     );
+
+    //Associate the styled map with the MapTypeId and set it to display.
+    map.mapTypes.set('my_style', my_styledMapType);
+    map.setMapTypeId('my_style');
+
     map.addListener('click', close_infoWindow);
 
     // Create an infoWindow
