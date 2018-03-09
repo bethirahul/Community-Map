@@ -1,5 +1,11 @@
+# Secrets like app keys, app ids, app secrets, usernames, passwords
 */secrets.json
 secrets.json
 
-database
-*/database
+# Database folder
+*/database/
+database/
+
+# Python cache folder
+# */__pycache__/
+# __pycache__/
