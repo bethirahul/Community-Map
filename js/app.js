@@ -47,12 +47,12 @@ function createPlaces()
                     json_data.Places[i].location,
                     json_data.Places[i].description
                 )
+                new_place.marker.setVisible(false);
                 places.push(new_place);
                 bounds.extend(new_place.location);
             }
             console.log("Created Places:");
             print_places();
-            map.fitBounds(bounds);
         }
     )
     .catch(
@@ -83,11 +83,15 @@ function toggle_markers(btn)
     {
         //var btn = document.getElementById("toggle-markers-btn");
         var isVisible = places[0].marker.getVisible();
-        if(isVisible)
-            btn.innerHTML = "Hide Markers";
-        else
-            btn.innerHTML = "Show Markers";
         for(var i=0; i<places.length; i++)
             places[i].marker.setVisible(!isVisible);
+
+        if(!isVisible)
+        {
+            btn.innerHTML = "Hide Markers";
+            map.fitBounds(bounds);
+        }
+        else
+            btn.innerHTML = "Show Markers";
     }
 }

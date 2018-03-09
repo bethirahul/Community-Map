@@ -2,7 +2,7 @@ var map;
 var infoWindow;
 var bounds;
 
-var center = { lat: 37.635667, lng: -122.218386 }
+var center = { lat: 37.402349, lng: -121.927459 }
 
 function initMap()
 {
