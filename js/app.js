@@ -16,10 +16,14 @@ var Place = function(id, name, {lat, lng}, description)
         }
     );
     self.description = description;
+
+    var content = '<div id="info-window">' + self.description;
+    content += "<br/>(" + self.location.lat;
+    content += ", " + self.location.lng + ")</div>";
     
     self.marker.addListener(
         'click',
-        function() { set_InfoWindow(this, self.description, self.location); }
+        function() { set_InfoWindow(this, content); }
     )
 }
 
