@@ -31,7 +31,7 @@ function createPlaces()
     .then(
         function(data)
         {
-            console.log(data);
+            //console.log(data);
             return data.json();
         }
     )
@@ -54,6 +54,13 @@ function createPlaces()
             print_places();
             map.fitBounds(bounds);
         }
+    )
+    .catch(
+        function(error)
+        {
+            console.log("Error occured while fetching for places data:")
+            console.log(error);
+        }
     );
 }
 
@@ -67,5 +74,20 @@ function print_places()
             description: places[i].description
         };
         console.log(result);
+    }
+}
+
+function toggle_markers(btn)
+{
+    if(places[0])
+    {
+        //var btn = document.getElementById("toggle-markers-btn");
+        var isVisible = places[0].marker.getVisible();
+        if(isVisible)
+            btn.innerHTML = "Hide Markers";
+        else
+            btn.innerHTML = "Show Markers";
+        for(var i=0; i<places.length; i++)
+            places[i].marker.setVisible(!isVisible);
     }
 }
