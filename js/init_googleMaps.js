@@ -1,6 +1,9 @@
 var map;
 var infoWindow;
 var bounds;
+var default_marker_icon;
+var hover_marker_icon;
+var selected_marker_icon;
 
 var center = { lat: 37.402349, lng: -121.927459 }
 
@@ -11,7 +14,7 @@ function initMap()
     var styles = [
 
     ];
-    
+
     // Creates Google Maps at the DOM element which has an id map; with
     // Latitude and Longitude for center and Zoom level (0-21) for area.
     map = new google.maps.Map(
@@ -32,13 +35,18 @@ function initMap()
 
     // Create Bounds
     bounds = new google.maps.LatLngBounds();
+
+    // Marker Icons
+    default_marker_icon = create_marker_icon('flag/default.png');
+    hover_marker_icon = create_marker_icon('flag/hover.png');
+    selected_marker_icon = create_marker_icon('flag/selected.png');
     
     console.log("Created Google Maps");
 
     createPlaces();
 }
 
-function set_InfoWindow(marker, content)
+function set_infoWindow(marker, content)
 {
     // To stop setting and opening info window if already open at the same
     // marker
@@ -57,4 +65,23 @@ function close_infoWindow()
 {
     infoWindow.marker = null;
     infoWindow.close();
+    reset_all_markers_icons();
+}
+
+function create_marker_icon(url)
+{
+    var icon = new google.maps.MarkerImage(
+        // url
+        'images/marker_icons/' + url,
+        // size
+        new google.maps.Size(134/10, 226/10),
+        // origin
+        new google.maps.Point(0, 0),
+        // anchor
+        new google.maps.Point(((134-1)/10)*0.04, (226-1)/10),
+        //scale
+        new google.maps.Size(134/10, 226/10)
+    )
+
+    return icon;
 }

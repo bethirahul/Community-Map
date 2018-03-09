@@ -12,18 +12,43 @@ var Place = function(id, name, {lat, lng}, description)
             position: self.location,
             map: map,
             title: self.name,
+            icon: default_marker_icon,
             animation: google.maps.Animation.DROP
         }
     );
     self.description = description;
+    self.isSelected = false;
 
     var content = '<div id="info-window">' + self.description;
     content += "<br/>(" + self.location.lat;
     content += ", " + self.location.lng + ")</div>";
+
     
     self.marker.addListener(
+        'mouseover',
+        function()
+        {
+            if(!self.isSelected)
+                this.setIcon(hover_marker_icon);
+        }
+    )
+    self.marker.addListener(
+        'mouseout',
+        function()
+        {
+            if(!self.isSelected)
+                this.setIcon(default_marker_icon);
+        }
+    )
+    self.marker.addListener(
         'click',
-        function() { set_InfoWindow(this, content); }
+        function()
+        {
+            reset_all_markers_icons();
+            set_infoWindow(this, content);
+            this.setIcon(selected_marker_icon);
+            self.isSelected = true;
+        }
     )
 }
 
@@ -97,5 +122,14 @@ function toggle_markers(btn)
         }
         else
             btn.innerHTML = "Show Markers";
+    }
+}
+
+function reset_all_markers_icons()
+{
+    for(var i=0; i<places.length; i++)
+    {
+        places[i].marker.setIcon(default_marker_icon);
+        places[i].isSelected = false;
     }
 }
