@@ -17,7 +17,7 @@ from database_setup import Base, Place
 # This is to get dynamic loading of url_for while Flask renders templates
 import os
 
-from flask_cors import CORS
+#from flask_cors import CORS
 
 
 # First set Flask app
@@ -55,7 +55,9 @@ def placesJSON():
 
     # Found Place table
     if places:
-        return jsonify(Places=[place.serialize for place in places])
+        response = jsonify(Places=[place.serialize for place in places])
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     return 'Could not retrieve places'
 

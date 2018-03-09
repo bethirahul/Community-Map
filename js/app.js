@@ -31,6 +31,7 @@ function createPlaces()
     .then(
         function(data)
         {
+            console.log(data);
             return data.json();
         }
     )
