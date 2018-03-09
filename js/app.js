@@ -19,7 +19,7 @@ var Place = function(id, name, {lat, lng}, description)
     
     self.marker.addListener(
         'click',
-        function() { set_InfoWindow(this, self.description); }
+        function() { set_InfoWindow(this, self.description, self.location); }
     )
 }
 

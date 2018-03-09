@@ -28,13 +28,17 @@ function initMap()
     createPlaces();
 }
 
-function set_InfoWindow(marker, content)
+function set_InfoWindow(marker, content, location)
 {
     // To stop setting and opening info window if already open at the same
     // marker
     if(infoWindow.marker != marker)
     {
         // Set infoWindow content and open
+        content = '<div id="info-window">' + content;
+        content += "<br/>(" + location.lat;
+        content += ", " + location.lng + ")</div>"; 
+        
         infoWindow.marker = marker;
         infoWindow.setContent(content);
         infoWindow.open(map, marker);
