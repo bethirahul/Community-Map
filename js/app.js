@@ -44,10 +44,13 @@ var Place = function(id, name, {lat, lng}, description)
         'click',
         function()
         {
-            reset_all_markers_icons();
-            set_infoWindow(this, content);
-            this.setIcon(selected_marker_icon);
-            self.isSelected = true;
+            if(!self.isSelected)
+            {
+                reset_all_markers_icons();
+                set_infoWindow(this, content);
+                this.setIcon(selected_marker_icon);
+                self.isSelected = true;
+            }
         }
     )
 }
@@ -111,11 +114,15 @@ function toggle_markers(btn)
     if(places[0])
     {
         //var btn = document.getElementById("toggle-markers-btn");
-        var isVisible = places[0].marker.getVisible();
+        var initialState = places[0].marker.getVisible();
         for(var i=0; i<places.length; i++)
-            places[i].marker.setVisible(!isVisible);
+        {
+            places[i].marker.setVisible(!initialState);
+            if(!initialState)
+                places[i].marker.setAnimation(google.maps.Animation.DROP);
+        }
 
-        if(!isVisible)
+        if(!initialState)
         {
             btn.innerHTML = "Hide Markers";
             map.fitBounds(bounds);
