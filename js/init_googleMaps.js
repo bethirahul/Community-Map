@@ -29,7 +29,7 @@ function initMap()
             {
               featureType: 'administrative.land_parcel',
               elementType: 'labels.text.fill',
-              stylers: [{color: '#ae9e90'}]
+              stylers: [{color: '#6b6968'}]
             },
             {
               featureType: 'landscape.natural',
@@ -44,7 +44,7 @@ function initMap()
             {
               featureType: 'poi',
               elementType: 'labels.text.fill',
-              stylers: [{color: '#93817c'}]
+              stylers: [{color: '#665854'}]
             },
             {
               featureType: 'poi.park',
@@ -89,7 +89,7 @@ function initMap()
             {
               featureType: 'road.local',
               elementType: 'labels.text.fill',
-              stylers: [{color: '#c9c3b7'}]
+              stylers: [{color: '#151c38'}]
             },
             {
               featureType: 'transit.line',
