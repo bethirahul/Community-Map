@@ -1,3 +1,46 @@
+function make_url(url, parameters)
+{
+    url += '?';
+    for(key in parameters)
+    {
+        value = parameters[key];
+        url += key + '=' + value;
+        url += '&';
+    }
+
+    return url;
+}
+
+(function()
+{
+    var url = "https://maps.googleapis.com/maps/api/js";
+    var parameters = {
+        'key': 'AIzaSyCxJAircwo3jIDVpKa2WCDz86mdtX-YOng',
+        'callback': 'initMap'
+    };
+
+    url = make_url(url, parameters);
+
+    /*var app_key = 'AIzaSyCxJAircwo3jIDVpKa2WCDz86mdtX-YOng';
+    var callback_function = 'initMap';
+
+    //url = "https://maps.googleapis.com/maps/api/js";
+    url += '?';
+    url += 'key' + '=' + app_key;
+    url += '&';
+    url += 'callback' + '=' + callback_function;*/
+
+    var body = document.getElementsByTagName('body')[0];
+    var theScript = document.createElement('script');
+    theScript.type = 'text/javascript';
+    theScript.src = url;
+    theScript.async = true;
+    theScript.defer = true;
+    body.appendChild(theScript);
+})();
+
+//==============================================================================
+
 var map;
 var infoWindow;
 var bounds;
