@@ -22,7 +22,6 @@ var Place = function(id, name, {lat, lng}, description)
     var content = '<div id="info-window">' + self.description;
     content += "<br/>(" + self.location.lat;
     content += ", " + self.location.lng + ")</div>";
-
     
     self.marker.addListener(
         'mouseover',
