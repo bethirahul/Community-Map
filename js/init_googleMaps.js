@@ -21,15 +21,6 @@ function make_url(url, parameters)
 
     url = make_url(url, parameters);
 
-    /*var app_key = 'AIzaSyCxJAircwo3jIDVpKa2WCDz86mdtX-YOng';
-    var callback_function = 'initMap';
-
-    //url = "https://maps.googleapis.com/maps/api/js";
-    url += '?';
-    url += 'key' + '=' + app_key;
-    url += '&';
-    url += 'callback' + '=' + callback_function;*/
-
     var body = document.getElementsByTagName('body')[0];
     var theScript = document.createElement('script');
     theScript.type = 'text/javascript';
