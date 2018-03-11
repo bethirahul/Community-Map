@@ -48,6 +48,7 @@ function make_url(url, parameters={})
 //==============================================================================
 
 var map;
+
 var infoWindow;
 var bounds;
 var default_marker_icon;
@@ -55,6 +56,7 @@ var hover_marker_icon;
 var selected_marker_icon;
 
 var drawing_manager;
+var polygon;
 
 var center = { lat: 37.402349, lng: -121.927459 }
 
@@ -215,7 +217,7 @@ function initMap()
 
     map.addListener('click', close_infoWindow);
 
-    // Drawing
+    // Drawing mode
     drawing_manager = new google.maps.drawing.DrawingManager(
         {
             drawingMode: google.maps.drawing.OverlayType.POLYGON,
@@ -226,6 +228,44 @@ function initMap()
                     google.maps.drawing.OverlayType.POLYGON
                 ]
             }
+        }
+    );
+    // Event listener when polygon is complete
+    drawing_manager.addListener(
+        'overlaycomplete',
+        function(event)
+        {
+            console.log("Polygon complete");
+            // close polygon
+            if(polygon)
+                polygon.setMap(null);
+
+            // Close all markers
+            //reset_all_markers_icons();
+            //for(var i=0; i<places.length; i++)
+                //places[i].marker.setVisible(false);
+
+            // Switch to hand mode, no more drawing.
+            drawing_manager.setDrawingMode(null);
+
+            // new polygon from the completed one
+            polygon = event.overlay;
+
+            // make this newly created polygon as editable
+            polygon.setEditable(true);
+            // add event listeners tho this newly created polygon
+            // which trigger when it is edited.
+            polygon.getPath().addListener(
+                'set_at',
+                search_within_polygon
+            );
+            polygon.getPath().addListener(
+                'insert_at',
+                search_within_polygon
+            );
+            polygon.addListener('click', close_infoWindow);
+
+            search_within_polygon();
         }
     );
 
@@ -244,6 +284,38 @@ function initMap()
     console.log("Created Google Maps");
 
     createPlaces();
+}
+
+function search_within_polygon()
+{
+    // Close infoWindow
+    if(infoWindow.marker)
+        close_infoWindow();
+    
+    // Show/Hide markers
+    for(var i=0; i<places.length; i++)
+    {
+        if(google.maps.geometry.poly.containsLocation(
+            places[i].marker.position,
+            polygon
+        ))
+        {
+            if(!places[i].marker.getVisible())
+            {
+                places[i].marker.setVisible(true);
+                places[i].marker.setAnimation(google.maps.Animation.DROP);
+            }
+        }
+        else
+        {
+            if(places[i].marker.getVisible())
+            {
+                places[i].marker.setIcon(default_marker_icon);
+                places[i].isSelected = false;
+                places[i].marker.setVisible(false);
+            }
+        }
+    }
 }
 
 function set_infoWindow(marker, content)

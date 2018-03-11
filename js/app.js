@@ -114,6 +114,7 @@ function toggle_markers(btn)
     {
         //var btn = document.getElementById("toggle-markers-btn");
         var initialState = places[0].marker.getVisible();
+        reset_all_markers_icons();
         for(var i=0; i<places.length; i++)
         {
             places[i].marker.setVisible(!initialState);
@@ -145,6 +146,8 @@ function toggle_drawing(btn)
     if(drawing_manager.map)
     {
         drawing_manager.setMap(null);
+        if(polygon)
+            polygon.setMap(null);
         btn.innerHTML = "Show drawing tools";
     }
     else
