@@ -123,11 +123,11 @@ function toggle_markers(btn)
 
         if(!initialState)
         {
-            btn.innerHTML = "Hide Markers";
+            btn.innerHTML = "Hide all Markers";
             map.fitBounds(bounds);
         }
         else
-            btn.innerHTML = "Show Markers";
+            btn.innerHTML = "Show all Markers";
     }
 }
 
@@ -138,4 +138,9 @@ function reset_all_markers_icons()
         places[i].marker.setIcon(default_marker_icon);
         places[i].isSelected = false;
     }
+}
+
+function toggle_drawing(btn)
+{
+    
 }

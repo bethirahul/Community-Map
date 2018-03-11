@@ -30,7 +30,7 @@ function make_url(url, parameters={})
     var url = "https://maps.googleapis.com/maps/api/js";
     var parameters = {
         'key': 'AIzaSyCxJAircwo3jIDVpKa2WCDz86mdtX-YOng',
-        'libraries': ['geometry', 'visualization'],
+        'libraries': ['geometry', 'drawing'],
         'callback': 'initMap'
     };
 
@@ -212,6 +212,20 @@ function initMap()
     map.setMapTypeId('my_style');
 
     map.addListener('click', close_infoWindow);
+
+    // Drawing
+    var drawing_manager = new google.maps.drawing.DrawingManager(
+        {
+            drawingMode: google.maps.drawing.OverlayType.POLYGON,
+            drawingControl: true,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_LEFT,
+                drawingModes: [
+                    google.maps.drawing.OverlayType.POLYGON
+                ]
+            }
+        }
+    );
 
     // Create an infoWindow
     infoWindow = new google.maps.InfoWindow();
