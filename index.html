@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="css/styles.css" media="screen">
 </head>
 <body>  
-  <div id="map-container">
+  <main id="map-container">
     <div id="map"></div>
     <button id="toggle-markers-btn" class="on-map"
         onclick="toggle_markers(this)">
@@ -18,18 +18,16 @@
         onclick="toggle_drawing(this)">
       Show drawing tools
     </button>
-    <div id="zoomInAddress" class="on-map">
-      <input
-          id="zoomInAddress-input"
-          class="address-bar"
-          placeholder="Enter address to zoom in"
-          onkeypress="zoomToAddress(event)">
-      </input>
-      <button onclick="zoomToAddress()">
-        Zoom
-      </button>
-    </div>
-  </div>
+    <button id="zoomInAdddress-btn" class="on-map" onclick="zoomToAddress()">
+      Zoom
+    </button><br>
+    <input
+        id="zoomInAddress-input"
+        class="address-bar on-map"
+        placeholder="Enter address to zoom in"
+        onkeypress="zoomToAddress(event)">
+    </input>
+  </main>
 
   <!-- ====== J A V A S C R I P T ========================================== -->
 

@@ -3,7 +3,7 @@ html, body
     font-family: Arial, Helvetica, sans-serif;
 }
 
-html, body, div, h1, h3
+html, body, div, h1, h3, main
 {
     margin: 0;
     padding: 0;
@@ -29,14 +29,14 @@ html, body, div, h1, h3
 
 #toggle-markers-btn
 {
-    bottom: 3mm;
-    left: 3mm;
+    bottom: 7mm;
+    left: 1.5mm;
 }
 
 #toggle-drawing-btn
 {
-    bottom: 3mm;
-    left: 37mm;
+    bottom: 13.5mm;
+    left: 1.5mm;
 }
 
 #info-window
@@ -50,14 +50,20 @@ html, body, div, h1, h3
     height: 50mm;
 }
 
-#zoomInAddress
+#zoomInAddress-input
 {
-    bottom: 10mm;
-    left: 3mm;
+    bottom: 4mm;
+    right: 12mm;
+}
+
+#zoomInAdddress-btn
+{
+    bottom: 10.5mm;
+    right: 12mm;
 }
 
 .address-bar
 {
-    width: 53.25mm;
+    width: 50mm;
     min-width: 40mm;
 }
