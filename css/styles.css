@@ -67,3 +67,20 @@ html, body, div, h1, h3, main
     width: 50mm;
     min-width: 40mm;
 }
+
+#search-btn
+{
+    top: 2.5mm;
+    right: 1.5mm;
+}
+
+#search
+{
+    /*display: none;*/
+}
+
+#searchWithInAddress-input
+{
+    top: 10mm;
+    right: 1.5mm;
+}

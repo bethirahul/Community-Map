@@ -20,13 +20,31 @@
     </button>
     <button id="zoomInAdddress-btn" class="on-map" onclick="zoomToAddress()">
       Zoom
-    </button><br>
+    </button>
     <input
         id="zoomInAddress-input"
         class="address-bar on-map"
         placeholder="Enter address to zoom in"
         onkeypress="zoomToAddress(event)">
     </input>
+    <button id="search-btn" class="on-map" onclock="toggle_search(this)">
+      Search
+    </button>
+    <div id="search">
+      <h3>Search with in:</h3>
+      <input
+          id="searchWithInAddress-input"
+          class="address-bar on-map"
+          placeholder="Enter address"
+          onkeypress="searchWithInAddress(event)">
+      </input>
+      <button
+          id="searchWithInAddres-btn"
+          class="on-map"
+          onclick="searchWithInAddress()">
+        Search
+      </button>
+    </div>
   </main>
 
   <!-- ====== J A V A S C R I P T ========================================== -->

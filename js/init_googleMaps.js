@@ -207,7 +207,8 @@ function initMap()
                     'terrain',
                     'my_style'
                 ]
-            }
+            },
+            fullscreenControl: false
         }
     );
 
