@@ -235,7 +235,6 @@ function initMap()
         'overlaycomplete',
         function(event)
         {
-            console.log("Polygon complete");
             // close polygon
             if(polygon)
                 polygon.setMap(null);
@@ -288,6 +287,8 @@ function initMap()
 
 function search_within_polygon()
 {
+    area = google.maps.geometry.spherical.computeArea(polygon.getPath());
+    alert(area + " square meters");
     // Close infoWindow
     if(infoWindow.marker)
         close_infoWindow();
