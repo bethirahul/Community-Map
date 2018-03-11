@@ -1,7 +1,6 @@
 html, body
 {
     font-family: Arial, Helvetica, sans-serif;
-    height: 100%;
 }
 
 html, body, div, h1, h3
@@ -49,4 +48,16 @@ html, body, div, h1, h3
 {
     width: 50mm;
     height: 50mm;
+}
+
+#zoomInAddress
+{
+    bottom: 10mm;
+    left: 3mm;
+}
+
+.address-bar
+{
+    width: 53.25mm;
+    min-width: 40mm;
 }

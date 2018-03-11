@@ -1,44 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Community Map</title>
-    <link rel="stylesheet" href="css/styles.css" media="screen">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Community Map</title>
+  <link rel="stylesheet" href="css/styles.css" media="screen">
 </head>
-<body>
-
-    <div id="map-container">
-        <div id="map">
-            
-        </div>
-            <button
-                id="toggle-markers-btn"
-                class="on-map"
-                onclick="toggle_markers(this)">
-                Show all Markers
-            </button>
-            <button
-                id="toggle-drawing-btn"
-                class="on-map"
-                onclick="toggle_drawing(this)">
-                Show drawing tools
-            </button>
+<body>  
+  <div id="map-container">
+    <div id="map"></div>
+    <button id="toggle-markers-btn" class="on-map"
+        onclick="toggle_markers(this)">
+      Show all Markers
+    </button>
+    <button id="toggle-drawing-btn" class="on-map"
+        onclick="toggle_drawing(this)">
+      Show drawing tools
+    </button>
+    <div id="zoomInAddress" class="on-map">
+      <input id="zoomInAddress-input" class="address-bar" placeholder="Enter address to zoom in"></input>
+      <button onclick="zoomToAddress()">
+        Zoom
+      </button>
     </div>
+  </div>
 
+  <!-- ====== J A V A S C R I P T ========================================== -->
 
-    <!-- ====== J A V A S C R I P T ======================================== -->
+  <!--<script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous">
+  </script>-->
 
-    <script
-        src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous">
-    </script>
-
-    <script src="js/init_googleMaps.js"></script>
-    
-    <script src="js/app.js"></script>
+  <script src="js/init_googleMaps.js"></script>
+  <script src="js/app.js"></script>
 
 </body>
 </html>

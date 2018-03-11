@@ -156,3 +156,33 @@ function toggle_drawing(btn)
         btn.innerHTML = "Hide drawing tools";
     }
 }
+
+function zoomToAddress()
+{
+    var address = document.getElementById('zoomInAddress-input').value;
+    if(address != '')
+    {
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode(
+            {
+                address: address,
+                //componentRestrictions: { locality: 'San Jose' }
+            },
+            // call back function
+            function(results, status)
+            {
+                if(status == google.maps.GeocoderStatus.OK)
+                {
+                    console.log(results[0].formatted_address);
+                    // center map to first result location
+                    map.setCenter(results[0].geometry.location);
+                    map.setZoom(15);
+                }
+                else
+                    alert("No results were found with that address");
+            }
+        );
+    }
+    else
+        alert("You must enter an address to zoom-in");
+}
