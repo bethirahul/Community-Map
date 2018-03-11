@@ -1,11 +1,25 @@
-function make_url(url, parameters)
+function make_url(url, parameters={})
 {
-    url += '?';
-    for(key in parameters)
+    parameters_length = Object.keys(parameters).length;
+    if(parameters_length > 0)
     {
-        value = parameters[key];
-        url += key + '=' + value;
-        url += '&';
+        url += '?';
+        k = 0;
+        for(key in parameters)
+        {
+            value = parameters[key];
+            if(value.constructor === Array)
+            {
+                url += key + '=' + value[0];
+                for(var i=1; i<value.length; i++)
+                    url += "," + value[i];
+            }
+            else
+                url += key + '=' + value;
+            if(k < parameters_length-1)
+                url += '&';
+            k++;
+        }
     }
 
     return url;
@@ -16,7 +30,7 @@ function make_url(url, parameters)
     var url = "https://maps.googleapis.com/maps/api/js";
     var parameters = {
         'key': 'AIzaSyCxJAircwo3jIDVpKa2WCDz86mdtX-YOng',
-        'libraries': 'geometry',
+        'libraries': ['geometry', 'visualization'],
         'callback': 'initMap'
     };
 
@@ -232,7 +246,6 @@ function set_infoWindow(marker, content)
         {
             if(status == google.maps.StreetViewStatus.OK)
             {
-                console.log("1");
                 var nearBy_streetView_location = data.location.latLng;
                 var heading = google.maps.geometry.spherical.computeHeading(
                     nearBy_streetView_location,
@@ -242,23 +255,19 @@ function set_infoWindow(marker, content)
                 content += '<div id="panorama"></div>';
                 infoWindow.setContent(content);
                 infoWindow.open(map, marker);
-                console.log(content);
 
                 var panorama_options = {
                     position: nearBy_streetView_location,
                     pov: {
                         heading: heading,
-                        pitch: 30
+                        pitch: 20
                     }
                 };
-
-                console.log("Creating panorama");
                 var panorama = new google.maps.StreetViewPanorama(
                     document.getElementById("panorama"),
                     panorama_options
                 );
                 panorama.setVisible(true);
-                console.log("Panorama created");
             }
             else
             {
@@ -266,21 +275,13 @@ function set_infoWindow(marker, content)
                 infoWindow.setContent(content);
                 infoWindow.open(map, marker);
             }
-
-            // Set infoWindow content and open
-            //infoWindow.marker = marker;
-            //infoWindow.setContent(content);
-            //infoWindow.open(map, marker);
-            // To close the infoWindow
-            //infoWindow.addListener('closeclick', close_infoWindow);
         }
-        console.log("start");
+
         streetView_service.getPanoramaByLocation(
             marker.position,
             radius,
             get_streetView
         );
-        console.log("end");
     }
 }
 
