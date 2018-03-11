@@ -19,7 +19,12 @@
       Show drawing tools
     </button>
     <div id="zoomInAddress" class="on-map">
-      <input id="zoomInAddress-input" class="address-bar" placeholder="Enter address to zoom in"></input>
+      <input
+          id="zoomInAddress-input"
+          class="address-bar"
+          placeholder="Enter address to zoom in"
+          onkeypress="zoomToAddress(event)">
+      </input>
       <button onclick="zoomToAddress()">
         Zoom
       </button>

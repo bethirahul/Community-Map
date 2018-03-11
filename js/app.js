@@ -157,15 +157,18 @@ function toggle_drawing(btn)
     }
 }
 
-function zoomToAddress()
+function zoomToAddress(event=null)
 {
-    var address = document.getElementById('zoomInAddress-input').value;
-    if(address != '')
+    if(event)
+        if(event.key !== 'Enter')
+            return;
+    var address_bar = document.getElementById('zoomInAddress-input');
+    if(address_bar.value != '')
     {
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode(
             {
-                address: address,
+                address: address_bar.value,
                 //componentRestrictions: { locality: 'San Jose' }
             },
             // call back function
@@ -173,7 +176,7 @@ function zoomToAddress()
             {
                 if(status == google.maps.GeocoderStatus.OK)
                 {
-                    console.log(results[0].formatted_address);
+                    address_bar.value = results[0].formatted_address;
                     // center map to first result location
                     map.setCenter(results[0].geometry.location);
                     map.setZoom(15);
