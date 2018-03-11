@@ -54,6 +54,8 @@ var default_marker_icon;
 var hover_marker_icon;
 var selected_marker_icon;
 
+var drawing_manager;
+
 var center = { lat: 37.402349, lng: -121.927459 }
 
 function initMap()
@@ -214,7 +216,7 @@ function initMap()
     map.addListener('click', close_infoWindow);
 
     // Drawing
-    var drawing_manager = new google.maps.drawing.DrawingManager(
+    drawing_manager = new google.maps.drawing.DrawingManager(
         {
             drawingMode: google.maps.drawing.OverlayType.POLYGON,
             drawingControl: true,

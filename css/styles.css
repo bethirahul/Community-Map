@@ -34,6 +34,12 @@ html, body, div, h1, h3
     left: 3mm;
 }
 
+#toggle-drawing-btn
+{
+    bottom: 3mm;
+    left: 37mm;
+}
+
 #info-window
 {
     max-width: 55mm;

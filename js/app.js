@@ -142,5 +142,14 @@ function reset_all_markers_icons()
 
 function toggle_drawing(btn)
 {
-    
+    if(drawing_manager.map)
+    {
+        drawing_manager.setMap(null);
+        btn.innerHTML = "Show drawing tools";
+    }
+    else
+    {
+        drawing_manager.setMap(map);
+        btn.innerHTML = "Hide drawing tools";
+    }
 }
