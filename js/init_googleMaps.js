@@ -452,12 +452,13 @@ function show_markers_withIn_time(response)
 {
     if(polygon)
         polygon.setMap(null);
-        
+
     var max_ETA = document.getElementById('searchWithInTime-range-select')
             .value;
     var origins = response.originAddresses;
     var destinations = response.destinationAddresses;
-    var found_atleast_1 = false;
+    var results_found = 0;
+    var first_result_location;
     var new_bounds = new google.maps.LatLngBounds();
 
     for(var i=0; i<origins.length; i++)
@@ -474,9 +475,10 @@ function show_markers_withIn_time(response)
                 if(duration <= (max_ETA * 60)) // comparing time in seconds
                 {
                     places[i].showHide_marker(true);
-                    new_bounds.extend(places[i].marker.position);
-                    if(!found_atleast_1)
-                        found_atleast_1 = true;
+                    new_bounds.extend(places[i].location);
+                    results_found++;
+                    if(results_found == 1)
+                        first_result_location = places[i].location;
                     places[i].set_infoWindow(distance_text + "<br/>" + duration_text);
                 }
                 else
@@ -484,6 +486,16 @@ function show_markers_withIn_time(response)
             }
         }
     }
-    if(found_atleast_1)
-        map.fitBounds(new_bounds);
+    if(results_found > 0)
+    {
+        if(results_found > 1)
+            map.fitBounds(new_bounds);
+        else
+        {
+            map.setCenter(first_result_location);
+            map.setZoom(15);
+        }
+    }
+    else
+        alert("No results were found with that address.");
 }
