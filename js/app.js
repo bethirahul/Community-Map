@@ -45,14 +45,17 @@ var Place = function(id, name, {lat, lng}, description)
 
     self.showHide_marker = function(state)
     {
-        self.marker.setVisible(state);
-        if(state)
+        if(self.marker.getVisible() != state)
         {
-            self.marker.setIcon(default_marker_icon);
-            self.marker.setAnimation(google.maps.Animation.DROP);
+            self.marker.setVisible(state);
+            if(state)
+            {
+                self.marker.setIcon(default_marker_icon);
+                self.marker.setAnimation(google.maps.Animation.DROP);
+            }
+            else if(infoWindow.marker == self.marker)
+                close_infoWindow();
         }
-        else if(infoWindow.marker == self.marker)
-            close_infoWindow();
     }
 }
 
@@ -116,10 +119,7 @@ function showHide_all_markers(state)
             polygon.setMap(null);
 
         for(var i=0; i<places.length; i++)
-        {
-            if(places[i].marker.getVisible() != state)
-                places[i].showHide_marker(state);
-        }
+            places[i].showHide_marker(state);
 
         if(state)
             map.fitBounds(bounds);
@@ -191,29 +191,4 @@ function toggle_searchWithIn(btn)
     }
 }
 
-function searchWithInTime(event=null)
-{
-    if(event)
-        if(event.key !== 'Enter')
-            return;
-    var address = document.getElementById('searchWithInTime-addressBar').value;
-    
-    if(address != '')
-    {
-        var mode = document.getElementById('searchWithInTime-mode-select')
-                .value;
-        var range = document.getElementById('searchWithInTime-range-select')
-                .value;
-        
-        console.log(address, mode, range);
 
-        /*for(var i=0; i<places.length; i++)
-        {
-            places[i].showHide_marker(false);
-        }*/
-        //var distanceMatrixService = new.google.maps.DistanceMatrixService;
-
-    }
-    else
-        alert("You must enter an address to search with-in time and mode of transport.");
-}

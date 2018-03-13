@@ -305,15 +305,9 @@ function search_within_polygon()
             places[i].marker.position,
             polygon
         ))
-        {
-            if(!places[i].marker.getVisible())
-                places[i].showHide_marker(true);
-        }
+            places[i].showHide_marker(true);
         else
-        {
-            if(places[i].marker.getVisible())
-                places[i].showHide_marker(false);
-        }
+            places[i].showHide_marker(false);
     }
 }
 
@@ -400,4 +394,92 @@ function create_marker_icon(url, w, h, s, anchor_ratio)
     )
 
     return icon;
+}
+
+function searchWithInTime(event=null)
+{
+    if(event)
+        if(event.key !== 'Enter')
+            return;
+    var address = document.getElementById('searchWithInTime-addressBar').value;
+    
+    if(address != '')
+    {
+        var travelMode = google.maps.TravelMode[
+            document.getElementById('searchWithInTime-mode-select').value
+        ];
+
+        /*for(var i=0; i<places.length; i++)
+        {
+            places[i].showHide_marker(false);
+        }*/
+        var distanceMatrixService = new google.maps.DistanceMatrixService();
+        var origins = [];
+        for(var i=0; i<places.length; i++)
+            origins.push(places[i].marker.position);
+        destinations = [];
+        destinations.push(address);
+        
+        distanceMatrixService.getDistanceMatrix(
+            {
+                origins: origins,
+                destinations: destinations,
+                travelMode: travelMode,
+                unitSystem: google.maps.UnitSystem.IMPERIAL
+            },
+            // call-back function
+            function(response, status)
+            {
+                if(status == google.maps.DistanceMatrixStatus.OK)
+                {
+                    show_markers_withIn_time(response);
+                }
+                else
+                    alert(
+                        "No results were found with that address. Error: " +
+                        status
+                    );
+            }
+        );
+
+    }
+    else
+        alert("You must enter an address to search with-in time and mode of transport.");
+}
+
+function show_markers_withIn_time(response)
+{
+    console.log(response);
+    var max_ETA = document.getElementById('searchWithInTime-range-select')
+            .value;
+    var origins = response.originAddresses;
+    var destinations = response.destinationAddresses;
+    var found_atleast_1 = false;
+    var new_bounds = new google.maps.LatLngBounds();
+
+    for(var i=0; i<origins.length; i++)
+    {
+        var elements = response.rows[i].elements;
+        for(var j=0; j<elements.length; j++)
+        {
+            if(elements[j].status === 'OK')
+            {
+                
+                distance_text = elements[j].distance.text;
+                duration = elements[j].duration.value; // in seconds
+                duration_text = elements[j].duration.text;
+                if(duration <= (max_ETA * 60))
+                {
+                    places[i].showHide_marker(true);
+                    new_bounds.extend(places[i].marker.position);
+                    if(!found_atleast_1)
+                        found_atleast_1 = true;
+                }
+                else
+                    places[i].showHide_marker(false);
+            }
+        }
+    }
+    if(found_atleast_1)
+        map.fitBounds(new_bounds);
 }
