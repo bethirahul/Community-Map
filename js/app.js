@@ -16,6 +16,31 @@ var Place = function(id, name, {lat, lng}, description)
             animation: google.maps.Animation.DROP
         }
     );
+    self.infoWindow = new google.maps.InfoWindow();
+    self.infoWindow.addListener(
+        'closeclick',
+        function()
+        {
+            self.close_infoWindow();
+        }
+    );
+
+    self.set_infoWindow = function(content)
+    {
+        self.infoWindow.marker = self.marker;
+        self.infoWindow.setContent(content);
+        self.infoWindow.open(map, self.marker);
+    }
+
+    self.close_infoWindow = function()
+    {
+        if(self.infoWindow.marker != null)
+        {
+            self.infoWindow.marker = null;
+            self.infoWindow.close();
+        }
+    }
+
     self.description = description;
 
     var content = '<div id="infoWindow">' + self.description;
@@ -40,7 +65,11 @@ var Place = function(id, name, {lat, lng}, description)
     )
     self.marker.addListener(
         'click',
-        function() { set_infoWindow(this, content); }
+        function()
+        {
+            self.close_infoWindow();
+            set_mainInfoWindow(this, content);
+        }
     )
 
     self.showHide_marker = function(state)
@@ -53,8 +82,12 @@ var Place = function(id, name, {lat, lng}, description)
                 self.marker.setIcon(default_marker_icon);
                 self.marker.setAnimation(google.maps.Animation.DROP);
             }
-            else if(infoWindow.marker == self.marker)
-                close_infoWindow();
+            else
+            {
+                if(mainInfoWindow.marker == self.marker)
+                    close_mainInfoWindow();
+                self.close_infoWindow();
+            }
         }
     }
 }
@@ -115,6 +148,9 @@ function showHide_all_markers(state)
 {
     if(places[0])
     {
+        close_mainInfoWindow();
+        close_places_infoWindows();
+
         if(polygon)
             polygon.setMap(null);
 
@@ -124,6 +160,12 @@ function showHide_all_markers(state)
         if(state)
             map.fitBounds(bounds);
     }
+}
+
+function close_places_infoWindows()
+{
+    for(var i=0; i<places.length; i++)
+        places[i].close_infoWindow();
 }
 
 function toggle_drawing(btn)
@@ -150,6 +192,9 @@ function zoomIn_to_address(event=null)
     var address_bar = document.getElementById('zoomIn-addressBar');
     if(address_bar.value != '')
     {
+        if(polygon)
+            polygon.setMap(null);
+        
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode(
             {
@@ -188,7 +233,6 @@ function toggle_searchWithIn(btn)
     {
         search.style.display = 'none';
         btn.innerHTML = 'Show Search';
+        close_places_infoWindows();
     }
 }
-
-

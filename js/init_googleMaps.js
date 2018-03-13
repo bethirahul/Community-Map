@@ -49,7 +49,7 @@ function make_url(url, parameters={})
 
 var map;
 
-var infoWindow;
+var mainInfoWindow;
 var bounds;
 var default_marker_icon;
 var hover_marker_icon;
@@ -217,7 +217,7 @@ function initMap()
     map.mapTypes.set('my_style', my_styledMapType);
     map.setMapTypeId('my_style');
 
-    map.addListener('click', close_infoWindow);
+    map.addListener('click', close_mainInfoWindow);
 
     // Drawing mode
     drawing_manager = new google.maps.drawing.DrawingManager(
@@ -264,15 +264,15 @@ function initMap()
                 'insert_at',
                 search_within_polygon
             );
-            polygon.addListener('click', close_infoWindow);
+            polygon.addListener('click', close_mainInfoWindow);
 
             search_within_polygon();
         }
     );
 
-    // Create an infoWindow
-    infoWindow = new google.maps.InfoWindow();
-    infoWindow.addListener('closeclick', close_infoWindow);
+    // Create an mainInfoWindow
+    mainInfoWindow = new google.maps.InfoWindow();
+    mainInfoWindow.addListener('closeclick', close_mainInfoWindow);
 
     // Create Bounds
     bounds = new google.maps.LatLngBounds();
@@ -294,9 +294,9 @@ function search_within_polygon()
 {
     area = google.maps.geometry.spherical.computeArea(polygon.getPath());
     alert(area + " square meters");
-    // Close infoWindow
-    if(infoWindow.marker)
-        close_infoWindow();
+    // Close mainInfoWindow
+    if(mainInfoWindow.marker)
+        close_mainInfoWindow();
     
     // Show/Hide markers
     for(var i=0; i<places.length; i++)
@@ -311,18 +311,18 @@ function search_within_polygon()
     }
 }
 
-function set_infoWindow(marker, content)
+function set_mainInfoWindow(marker, content)
 {
     // To stop setting and opening info window if already open at the same
     // marker
-    if(infoWindow.marker != marker)
+    if(mainInfoWindow.marker != marker)
     {
         //infoWindow.setContent(content);
-        if(infoWindow.marker != null)
-            infoWindow.marker.setIcon(default_marker_icon);
+        if(mainInfoWindow.marker != null)
+            mainInfoWindow.marker.setIcon(default_marker_icon);
 
-        infoWindow.marker = marker;
-        infoWindow.marker.setIcon(selected_marker_icon);
+        mainInfoWindow.marker = marker;
+        mainInfoWindow.marker.setIcon(selected_marker_icon);
 
         var streetView_service = new google.maps.StreetViewService();
         var radius = 50;
@@ -338,8 +338,8 @@ function set_infoWindow(marker, content)
                 );
 
                 content += '<div id="panorama"></div>';
-                infoWindow.setContent(content);
-                infoWindow.open(map, marker);
+                mainInfoWindow.setContent(content);
+                mainInfoWindow.open(map, marker);
 
                 var panorama_options = {
                     position: nearBy_streetView_location,
@@ -357,8 +357,8 @@ function set_infoWindow(marker, content)
             else
             {
                 content += '<div>Loading Street View Failed!</div>';
-                infoWindow.setContent(content);
-                infoWindow.open(map, marker);
+                mainInfoWindow.setContent(content);
+                mainInfoWindow.open(map, marker);
             }
         }
 
@@ -370,14 +370,14 @@ function set_infoWindow(marker, content)
     }
 }
 
-function close_infoWindow()
+function close_mainInfoWindow()
 {
-    if(infoWindow.marker != null)
+    if(mainInfoWindow.marker != null)
     {
-        infoWindow.marker.setIcon(default_marker_icon);
-        infoWindow.marker = null;
+        mainInfoWindow.marker.setIcon(default_marker_icon);
+        mainInfoWindow.marker = null;
+        mainInfoWindow.close();
     }
-    infoWindow.close();
 }
 
 function create_marker_icon(url, w, h, s, anchor_ratio)
@@ -401,6 +401,7 @@ function searchWithInTime(event=null)
     if(event)
         if(event.key !== 'Enter')
             return;
+
     var address = document.getElementById('searchWithInTime-addressBar').value;
     
     if(address != '')
@@ -449,7 +450,9 @@ function searchWithInTime(event=null)
 
 function show_markers_withIn_time(response)
 {
-    console.log(response);
+    if(polygon)
+        polygon.setMap(null);
+        
     var max_ETA = document.getElementById('searchWithInTime-range-select')
             .value;
     var origins = response.originAddresses;
@@ -468,12 +471,13 @@ function show_markers_withIn_time(response)
                 distance_text = elements[j].distance.text;
                 duration = elements[j].duration.value; // in seconds
                 duration_text = elements[j].duration.text;
-                if(duration <= (max_ETA * 60))
+                if(duration <= (max_ETA * 60)) // comparing time in seconds
                 {
                     places[i].showHide_marker(true);
                     new_bounds.extend(places[i].marker.position);
                     if(!found_atleast_1)
                         found_atleast_1 = true;
+                    places[i].set_infoWindow(distance_text + "<br/>" + duration_text);
                 }
                 else
                     places[i].showHide_marker(false);
