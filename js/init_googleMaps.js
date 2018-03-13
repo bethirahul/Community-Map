@@ -278,9 +278,12 @@ function initMap()
     bounds = new google.maps.LatLngBounds();
 
     // Marker Icons
-    default_marker_icon = create_marker_icon('flag/default.png');
-    hover_marker_icon = create_marker_icon('flag/hover.png');
-    selected_marker_icon = create_marker_icon('flag/selected.png');
+    default_marker_icon = create_marker_icon(
+            'flag/default.png', 134, 226, 0.1, 0.04);
+    hover_marker_icon = create_marker_icon(
+            'flag/hover.png', 134, 226, 0.1, 0.04);
+    selected_marker_icon = create_marker_icon(
+            'flag/selected.png', 134, 226, 0.1, 0.04);
     
     console.log("Created Google Maps");
 
@@ -383,14 +386,17 @@ function close_infoWindow()
     infoWindow.close();
 }
 
-function create_marker_icon(url)
+function create_marker_icon(url, w, h, s, anchor_ratio)
 {
+    var ws = w * s;
+    var hs = h * s;
+
     var icon = new google.maps.MarkerImage(
         'images/marker_icons/' + url,                           // url
-        new google.maps.Size(134/10, 226/10),                   // size
+        new google.maps.Size(ws, hs),                           // size
         new google.maps.Point(0, 0),                            // origin
-        new google.maps.Point(((134-1)/10)*0.04, (226-1)/10),   // anchor
-        new google.maps.Size(134/10, 226/10)                    //scale
+        new google.maps.Point(((w-1)*s)*anchor_ratio, (h-1)*s), // anchor
+        new google.maps.Size(ws, hs)                            //scale
     )
 
     return icon;

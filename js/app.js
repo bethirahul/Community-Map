@@ -207,11 +207,10 @@ function searchWithInTime(event=null)
         
         console.log(address, mode, range);
 
-        reset_all_markers_icons();
-        for(var i=0; i<places.length; i++)
+        /*for(var i=0; i<places.length; i++)
         {
-            places[i].marker.setVisible(false);
-        }
+            places[i].showHide_marker(false);
+        }*/
         //var distanceMatrixService = new.google.maps.DistanceMatrixService;
 
     }
