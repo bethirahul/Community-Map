@@ -42,16 +42,12 @@ var Place = function(id, name, {lat, lng}, description)
     }
 
     self.description = description;
-
-    var content = '<div id="infoWindow">' + self.description;
-    content += "<br/>(" + self.location.lat;
-    content += ", " + self.location.lng + ")</div>";
     
     self.marker.addListener(
         'mouseover',
         function()
         {
-            if(infoWindow.marker != self.marker)
+            if(mainInfoWindow.marker != self.marker)
                 this.setIcon(hover_marker_icon);
         }
     )
@@ -59,7 +55,7 @@ var Place = function(id, name, {lat, lng}, description)
         'mouseout',
         function()
         {
-            if(infoWindow.marker != self.marker)
+            if(mainInfoWindow.marker != self.marker)
                 this.setIcon(default_marker_icon);
         }
     )
@@ -67,8 +63,7 @@ var Place = function(id, name, {lat, lng}, description)
         'click',
         function()
         {
-            self.close_infoWindow();
-            set_mainInfoWindow(this, content);
+            set_mainInfoWindow(self.id);
         }
     )
 

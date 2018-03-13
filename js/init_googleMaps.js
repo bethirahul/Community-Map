@@ -50,6 +50,7 @@ function make_url(url, parameters={})
 var map;
 
 var mainInfoWindow;
+var mainInfoWindow_place_id;
 var bounds;
 var default_marker_icon;
 var hover_marker_icon;
@@ -311,35 +312,51 @@ function search_within_polygon()
     }
 }
 
-function set_mainInfoWindow(marker, content)
+function set_mainInfoWindow(id)
 {
     // To stop setting and opening info window if already open at the same
     // marker
-    if(mainInfoWindow.marker != marker)
+    if(mainInfoWindow.marker != places[id].marker)
     {
         //infoWindow.setContent(content);
         if(mainInfoWindow.marker != null)
+        {
             mainInfoWindow.marker.setIcon(default_marker_icon);
+            if(places[mainInfoWindow_place_id].infoWindow.marker != null)
+                places[mainInfoWindow_place_id].infoWindow.open(
+                    map,
+                    places[mainInfoWindow_place_id].marker
+                );
+        }
 
-        mainInfoWindow.marker = marker;
+        mainInfoWindow_place_id = id;
+
+        mainInfoWindow.marker = places[id].marker;
         mainInfoWindow.marker.setIcon(selected_marker_icon);
+
+        if(places[id].infoWindow.marker == places[id].marker)
+            places[id].infoWindow.close();
 
         var streetView_service = new google.maps.StreetViewService();
         var radius = 50;
 
         function get_streetView(data, status)
         {
+            var content = '<div id="infoWindow">' + places[id].description;
+            content += "<br/>(" + places[id].location.lat;
+            content += ", " + places[id].location.lng + ")</div>";
+
             if(status == google.maps.StreetViewStatus.OK)
             {
                 var nearBy_streetView_location = data.location.latLng;
                 var heading = google.maps.geometry.spherical.computeHeading(
                     nearBy_streetView_location,
-                    marker.position
+                    places[id].marker.position
                 );
 
                 content += '<div id="panorama"></div>';
                 mainInfoWindow.setContent(content);
-                mainInfoWindow.open(map, marker);
+                mainInfoWindow.open(map, places[id].marker);
 
                 var panorama_options = {
                     position: nearBy_streetView_location,
@@ -358,12 +375,12 @@ function set_mainInfoWindow(marker, content)
             {
                 content += '<div>Loading Street View Failed!</div>';
                 mainInfoWindow.setContent(content);
-                mainInfoWindow.open(map, marker);
+                mainInfoWindow.open(map, places[id].marker);
             }
         }
 
         streetView_service.getPanoramaByLocation(
-            marker.position,
+            places[id].marker.position,
             radius,
             get_streetView
         );
@@ -375,6 +392,11 @@ function close_mainInfoWindow()
     if(mainInfoWindow.marker != null)
     {
         mainInfoWindow.marker.setIcon(default_marker_icon);
+        if(places[mainInfoWindow_place_id].infoWindow.marker != null)
+            places[mainInfoWindow_place_id].infoWindow.open(
+                map,
+                places[mainInfoWindow_place_id].marker
+            );
         mainInfoWindow.marker = null;
         mainInfoWindow.close();
     }
