@@ -73,7 +73,9 @@ html, body, div, h1, h4, main, input, button, select, option
 {
     bottom: 4mm;
     right: 12mm;
-    width: 49.5mm;
+    width: calc(100vw - 44mm);
+    max-width: 66.66mm;
+    min-width: 40mm;
 }
 
 #zoomIn-btn
@@ -98,7 +100,9 @@ html, body, div, h1, h4, main, input, button, select, option
 {
     top: 10mm;
     right: 1.5mm;
-    width: 65mm;
+    width: calc(100vw - 35mm);
+    max-width: 75mm;
+    min-width: 49.5mm;
 }
 
 #searchWithInTime-btn
