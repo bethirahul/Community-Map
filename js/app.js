@@ -113,16 +113,16 @@ function toggle_markers(btn)
     if(places[0])
     {
         //var btn = document.getElementById("toggle-markers-btn");
-        var initialState = places[0].marker.getVisible();
+        var initial_state = places[0].marker.getVisible();
         reset_all_markers_icons();
         for(var i=0; i<places.length; i++)
         {
-            places[i].marker.setVisible(!initialState);
-            if(!initialState)
+            places[i].marker.setVisible(!initial_state);
+            if(!initial_state)
                 places[i].marker.setAnimation(google.maps.Animation.DROP);
         }
 
-        if(!initialState)
+        if(!initial_state)
         {
             btn.innerHTML = "Hide all Markers";
             map.fitBounds(bounds);
@@ -188,4 +188,20 @@ function zoomToAddress(event=null)
     }
     else
         alert("You must enter an address to zoom-in");
+}
+
+function toggle_search(btn)
+{
+    search = document.getElementById('search');
+    initial_state = search.style.display;
+    if(initial_state == 'none' || initial_state == '')
+    {
+        search.style.display = 'block';
+        btn.innerHTML = 'Hide Search';
+    }
+    else
+    {
+        search.style.display = 'none';
+        btn.innerHTML = 'Show Search';
+    }
 }

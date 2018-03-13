@@ -27,20 +27,18 @@
         placeholder="Enter address to zoom in"
         onkeypress="zoomToAddress(event)">
     </input>
-    <button id="search-btn" class="on-map" onclock="toggle_search(this)">
-      Search
+    <button id="search-btn" class="on-map" onclick="toggle_search(this)">
+      Show Search
     </button>
-    <div id="search">
-      <h3>Search with in:</h3>
+    <div id="search" class="on-map">
       <input
           id="searchWithInAddress-input"
-          class="address-bar on-map"
-          placeholder="Enter address"
+          class="address-bar"
+          placeholder="Search address"
           onkeypress="searchWithInAddress(event)">
       </input>
       <button
           id="searchWithInAddres-btn"
-          class="on-map"
           onclick="searchWithInAddress()">
         Search
       </button>
