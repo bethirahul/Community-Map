@@ -200,6 +200,7 @@ function initMap()
             mapTypeControl: true,
             // Optional: For extra map types or restrict them
             mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
                 mapTypeIds: [
                     'roadmap',
                     'satellite',
@@ -303,19 +304,12 @@ function search_within_polygon()
         ))
         {
             if(!places[i].marker.getVisible())
-            {
-                places[i].marker.setVisible(true);
-                places[i].marker.setAnimation(google.maps.Animation.DROP);
-            }
+                places[i].showHide_marker(true);
         }
         else
         {
             if(places[i].marker.getVisible())
-            {
-                places[i].marker.setIcon(default_marker_icon);
-                places[i].isSelected = false;
-                places[i].marker.setVisible(false);
-            }
+                places[i].showHide_marker(false);
         }
     }
 }
@@ -327,7 +321,11 @@ function set_infoWindow(marker, content)
     if(infoWindow.marker != marker)
     {
         //infoWindow.setContent(content);
+        if(infoWindow.marker != null)
+            infoWindow.marker.setIcon(default_marker_icon);
+
         infoWindow.marker = marker;
+        infoWindow.marker.setIcon(selected_marker_icon);
 
         var streetView_service = new google.maps.StreetViewService();
         var radius = 50;
@@ -377,24 +375,22 @@ function set_infoWindow(marker, content)
 
 function close_infoWindow()
 {
-    infoWindow.marker = null;
+    if(infoWindow.marker != null)
+    {
+        infoWindow.marker.setIcon(default_marker_icon);
+        infoWindow.marker = null;
+    }
     infoWindow.close();
-    reset_all_markers_icons();
 }
 
 function create_marker_icon(url)
 {
     var icon = new google.maps.MarkerImage(
-        // url
-        'images/marker_icons/' + url,
-        // size
-        new google.maps.Size(134/10, 226/10),
-        // origin
-        new google.maps.Point(0, 0),
-        // anchor
-        new google.maps.Point(((134-1)/10)*0.04, (226-1)/10),
-        //scale
-        new google.maps.Size(134/10, 226/10)
+        'images/marker_icons/' + url,                           // url
+        new google.maps.Size(134/10, 226/10),                   // size
+        new google.maps.Point(0, 0),                            // origin
+        new google.maps.Point(((134-1)/10)*0.04, (226-1)/10),   // anchor
+        new google.maps.Size(134/10, 226/10)                    //scale
     )
 
     return icon;

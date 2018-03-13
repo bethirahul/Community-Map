@@ -17,9 +17,8 @@ var Place = function(id, name, {lat, lng}, description)
         }
     );
     self.description = description;
-    self.isSelected = false;
 
-    var content = '<div id="info-window">' + self.description;
+    var content = '<div id="infoWindow">' + self.description;
     content += "<br/>(" + self.location.lat;
     content += ", " + self.location.lng + ")</div>";
     
@@ -27,7 +26,7 @@ var Place = function(id, name, {lat, lng}, description)
         'mouseover',
         function()
         {
-            if(!self.isSelected)
+            if(infoWindow.marker != self.marker)
                 this.setIcon(hover_marker_icon);
         }
     )
@@ -35,23 +34,26 @@ var Place = function(id, name, {lat, lng}, description)
         'mouseout',
         function()
         {
-            if(!self.isSelected)
+            if(infoWindow.marker != self.marker)
                 this.setIcon(default_marker_icon);
         }
     )
     self.marker.addListener(
         'click',
-        function()
-        {
-            if(!self.isSelected)
-            {
-                reset_all_markers_icons();
-                set_infoWindow(this, content);
-                this.setIcon(selected_marker_icon);
-                self.isSelected = true;
-            }
-        }
+        function() { set_infoWindow(this, content); }
     )
+
+    self.showHide_marker = function(state)
+    {
+        self.marker.setVisible(state);
+        if(state)
+        {
+            self.marker.setIcon(default_marker_icon);
+            self.marker.setAnimation(google.maps.Animation.DROP);
+        }
+        else if(infoWindow.marker == self.marker)
+            close_infoWindow();
+    }
 }
 
 var places = [];
@@ -62,7 +64,6 @@ function createPlaces()
     .then(
         function(data)
         {
-            //console.log(data);
             return data.json();
         }
     )
@@ -71,7 +72,6 @@ function createPlaces()
         {
             for(var i=0; i<json_data.Places.length; i++)
             {
-                //console.log(json_data.Places[i])
                 var new_place = new Place(
                     i,
                     json_data.Places[i].name,
@@ -108,36 +108,21 @@ function print_places()
     }
 }
 
-function toggle_markers(btn)
+function showHide_all_markers(state)
 {
     if(places[0])
     {
-        //var btn = document.getElementById("toggle-markers-btn");
-        var initial_state = places[0].marker.getVisible();
-        reset_all_markers_icons();
+        if(polygon)
+            polygon.setMap(null);
+
         for(var i=0; i<places.length; i++)
         {
-            places[i].marker.setVisible(!initial_state);
-            if(!initial_state)
-                places[i].marker.setAnimation(google.maps.Animation.DROP);
+            if(places[i].marker.getVisible() != state)
+                places[i].showHide_marker(state);
         }
 
-        if(!initial_state)
-        {
-            btn.innerHTML = "Hide all Markers";
+        if(state)
             map.fitBounds(bounds);
-        }
-        else
-            btn.innerHTML = "Show all Markers";
-    }
-}
-
-function reset_all_markers_icons()
-{
-    for(var i=0; i<places.length; i++)
-    {
-        places[i].marker.setIcon(default_marker_icon);
-        places[i].isSelected = false;
     }
 }
 
@@ -148,7 +133,7 @@ function toggle_drawing(btn)
         drawing_manager.setMap(null);
         if(polygon)
             polygon.setMap(null);
-        btn.innerHTML = "Show drawing tools";
+        btn.innerHTML = "Search with-in area";
     }
     else
     {
@@ -157,12 +142,12 @@ function toggle_drawing(btn)
     }
 }
 
-function zoomToAddress(event=null)
+function zoomIn_to_address(event=null)
 {
     if(event)
         if(event.key !== 'Enter')
             return;
-    var address_bar = document.getElementById('zoomInAddress-input');
+    var address_bar = document.getElementById('zoomIn-addressBar');
     if(address_bar.value != '')
     {
         var geocoder = new google.maps.Geocoder();
@@ -182,17 +167,17 @@ function zoomToAddress(event=null)
                     map.setZoom(15);
                 }
                 else
-                    alert("No results were found with that address");
+                    alert("No results were found with that address.");
             }
         );
     }
     else
-        alert("You must enter an address to zoom-in");
+        alert("You must enter an address to zoom-in.");
 }
 
-function toggle_search(btn)
+function toggle_searchWithIn(btn)
 {
-    search = document.getElementById('search');
+    search = document.getElementById('searchWithInTime');
     initial_state = search.style.display;
     if(initial_state == 'none' || initial_state == '')
     {
@@ -204,4 +189,32 @@ function toggle_search(btn)
         search.style.display = 'none';
         btn.innerHTML = 'Show Search';
     }
+}
+
+function searchWithInTime(event=null)
+{
+    if(event)
+        if(event.key !== 'Enter')
+            return;
+    var address = document.getElementById('searchWithInTime-addressBar').value;
+    
+    if(address != '')
+    {
+        var mode = document.getElementById('searchWithInTime-mode-select')
+                .value;
+        var range = document.getElementById('searchWithInTime-range-select')
+                .value;
+        
+        console.log(address, mode, range);
+
+        reset_all_markers_icons();
+        for(var i=0; i<places.length; i++)
+        {
+            places[i].marker.setVisible(false);
+        }
+        //var distanceMatrixService = new.google.maps.DistanceMatrixService;
+
+    }
+    else
+        alert("You must enter an address to search with-in time and mode of transport.");
 }

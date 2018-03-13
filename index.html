@@ -10,38 +10,57 @@
 <body>  
   <main id="map-container">
     <div id="map"></div>
-    <button id="toggle-markers-btn" class="on-map"
-        onclick="toggle_markers(this)">
-      Show all Markers
-    </button>
+      <div id="toggle-markers"></div>
+        <button id="show-markers-btn" class="on-map"
+            onclick="showHide_all_markers(true)">
+          Show all Markers
+        </button>
+        <button id="hide-markers-btn" class="on-map"
+            onclick="showHide_all_markers(false)">
+          Hide all Markers
+        </button>
+      </div>
     <button id="toggle-drawing-btn" class="on-map"
         onclick="toggle_drawing(this)">
-      Show drawing tools
+      Search with-in area
     </button>
-    <button id="zoomInAdddress-btn" class="on-map" onclick="zoomToAddress()">
+    <button id="zoomIn-btn" class="on-map" onclick="zoomIn_to_address()">
       Zoom
     </button>
     <input
-        id="zoomInAddress-input"
-        class="address-bar on-map"
+        id="zoomIn-addressBar"
+        class="on-map"
         placeholder="Enter address to zoom in"
-        onkeypress="zoomToAddress(event)">
+        onkeypress="zoomIn_to_address(event)">
     </input>
-    <button id="search-btn" class="on-map" onclick="toggle_search(this)">
+    <button id="searchWithInTime-toggle-btn" class="on-map"
+        onclick="toggle_searchWithIn(this)">
       Show Search
     </button>
-    <div id="search" class="on-map">
+    <div id="searchWithInTime">
       <input
-          id="searchWithInAddress-input"
-          class="address-bar"
-          placeholder="Search address"
-          onkeypress="searchWithInAddress(event)">
+          id="searchWithInTime-addressBar" class="on-map"
+          placeholder="Enter address to search with-in"
+          onkeypress="searchWithInTime(event)">
       </input>
       <button
-          id="searchWithInAddres-btn"
-          onclick="searchWithInAddress()">
+          id="searchWithInTime-btn" class="on-map"
+          onclick="searchWithInTime()">
         Search
       </button>
+      <select id="searchWithInTime-range-select" class="on-map">
+        <option value="10">10 min</option>
+        <option value="20" selected>20 min</option>
+        <option value="30">30 min</option>
+        <option value="45">45 min</option>
+        <option value="60">1 hr</option>
+      </select>
+      <select id="searchWithInTime-mode-select" class="on-map">
+        <option value="WALKING">Walk</option>
+        <option value="BICYCLING">Bicycle</option>
+        <option value="DRIVING" selected>Drive</option>
+        <option value="TRANSIT">Transit</option>
+      </select>
     </div>
   </main>
 
