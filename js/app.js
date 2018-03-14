@@ -256,14 +256,17 @@ function toggle_searchWithIn(btn)
     }
 }
 
-function adjustRevert_pacContainer(state)
+function adjustRevert_autoComplete_style(state)
 {
     var pac_styleSheet = document.getElementById('pac-style');
-    if(pac_styleSheet)
-        console.log("Found");
+    
     if(state)
     {
-        rule = ".pac-container { top: calc(100vh - 55.33mm) !important; }";
+        pac_height = "58mm"
+        bar_height = document.getElementById("zoomIn-addressBar").clientHeight;
+        rule = ".pac-container { "
+        rule += "top: calc(100% - " + bar_height + "px - " + pac_height + ")";
+        rule += " !important; }";
         pac_styleSheet.innerHTML = rule;
     }
     else

@@ -32,7 +32,7 @@
         id="zoomIn-addressBar"
         class="on-map"
         placeholder="Enter address to zoom in"
-        onfocus="adjustRevert_pacContainer(true)"
+        onfocus="adjustRevert_autoComplete_style(true)"
         onkeypress="zoomIn_to_address(event)">
     </input>
     <button id="searchWithInTime-toggle-btn" class="on-map"
@@ -43,7 +43,7 @@
       <input
           id="searchWithInTime-addressBar" class="on-map"
           placeholder="Enter address to search with-in"
-          onfocus="adjustRevert_pacContainer(false)"
+          onfocus="adjustRevert_autoComplete_style(false)"
           onkeypress="searchWithInTime(event)">
       </input>
       <button
