@@ -30,7 +30,7 @@ function make_url(url, parameters={})
     var url = "https://maps.googleapis.com/maps/api/js";
     var parameters = {
         'key': 'AIzaSyCxJAircwo3jIDVpKa2WCDz86mdtX-YOng',
-        'libraries': ['geometry', 'drawing'],
+        'libraries': ['geometry', 'drawing', 'places'],
         'callback': 'initMap'
     };
 
