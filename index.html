@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Community Map</title>
   <link rel="stylesheet" href="css/styles.css" media="screen">
+  <style id="pac-style"></style>
 </head>
 <body>  
   <main id="map-container">
@@ -31,6 +32,7 @@
         id="zoomIn-addressBar"
         class="on-map"
         placeholder="Enter address to zoom in"
+        onfocus="adjustRevert_pacContainer(true)"
         onkeypress="zoomIn_to_address(event)">
     </input>
     <button id="searchWithInTime-toggle-btn" class="on-map"
@@ -41,6 +43,7 @@
       <input
           id="searchWithInTime-addressBar" class="on-map"
           placeholder="Enter address to search with-in"
+          onfocus="adjustRevert_pacContainer(false)"
           onkeypress="searchWithInTime(event)">
       </input>
       <button
@@ -66,11 +69,11 @@
 
   <!-- ====== J A V A S C R I P T ========================================== -->
 
-  <!--<script
+  <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
       crossorigin="anonymous">
-  </script>-->
+  </script>
 
   <script src="js/init_googleMaps.js"></script>
   <script src="js/app.js"></script>

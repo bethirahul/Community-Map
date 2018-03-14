@@ -259,8 +259,8 @@ function initMap()
 
             // Close all markers
             //reset_all_markers_icons();
-            //for(var i=0; i<places.length; i++)
-                //places[i].marker.setVisible(false);
+            for(var i=0; i<places.length; i++)
+                places[i].showHide_marker(false);
 
             // Switch to hand mode, no more drawing.
             drawing_manager.setDrawingMode(null);

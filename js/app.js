@@ -189,13 +189,19 @@ function zoomIn_to_address(event=null)
     if(event)
     {
         if(event.key !== 'Enter')
-            return;
-        else
         {
-            var pac_container =
+            /*var pac_container =
                     document.getElementsByClassName('pac-container')[0];
             if(pac_container)
                 console.log("Found .pac-container");
+            pac_container.style.position = 'absolute';
+            pac_container.style.bottom = '10mm';*/
+
+            /*pac = $('.pac-container');
+            pac.css('position', 'absolute');
+            pac.css('top', 'calc(100vh - 50mm)');*/
+            
+            return;
         }
     }
     var address_bar = document.getElementById('zoomIn-addressBar');
@@ -248,4 +254,18 @@ function toggle_searchWithIn(btn)
             if(directionsDisplay.getMap())
                 directionsDisplay.setMap(null);
     }
+}
+
+function adjustRevert_pacContainer(state)
+{
+    var pac_styleSheet = document.getElementById('pac-style');
+    if(pac_styleSheet)
+        console.log("Found");
+    if(state)
+    {
+        rule = ".pac-container { top: calc(100vh - 55.33mm) !important; }";
+        pac_styleSheet.innerHTML = rule;
+    }
+    else
+        pac_styleSheet.innerHTML = '';
 }
