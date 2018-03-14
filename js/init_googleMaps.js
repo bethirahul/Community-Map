@@ -222,6 +222,15 @@ function initMap()
 
     map.addListener('click', close_mainInfoWindow);
 
+    // Auto-complete
+    searchWithInTime_autoComplete = new google.maps.places.Autocomplete(
+        document.getElementById('searchWithInTime-addressBar')
+    );
+    zoomIn_autoComplete = new google.maps.places.Autocomplete(
+        document.getElementById('zoomIn-addressBar')
+    );
+    zoomIn_autoComplete.bindTo('bounds', map);
+
     // Drawing mode
     drawing_manager = new google.maps.drawing.DrawingManager(
         {
@@ -525,7 +534,7 @@ function show_markers_withIn_time(response)
     if(results_found > 0)
     {
         if(results_found > 1)
-            map.fitBounds(new_bounds);
+            setInterval( function() { map.fitBounds(new_bounds) }, 1000);
         else
         {
             map.setCenter(first_result_location);
