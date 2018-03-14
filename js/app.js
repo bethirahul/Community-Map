@@ -91,7 +91,8 @@ var places = [];
 
 function createPlaces()
 {
-    fetch("http://localhost:8000/places/json")
+    //fetch("http://localhost:8000/places/json")
+    fetch("http://192.168.0.107:8000/places/json")
     .then(
         function(data)
         {
@@ -186,8 +187,17 @@ function toggle_drawing(btn)
 function zoomIn_to_address(event=null)
 {
     if(event)
+    {
         if(event.key !== 'Enter')
             return;
+        else
+        {
+            var pac_container =
+                    document.getElementsByClassName('pac-container')[0];
+            if(pac_container)
+                console.log("Found .pac-container");
+        }
+    }
     var address_bar = document.getElementById('zoomIn-addressBar');
     if(address_bar.value != '')
     {
