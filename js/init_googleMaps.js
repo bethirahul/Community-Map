@@ -519,7 +519,7 @@ function show_markers_withIn_time(response)
                     results_found++;
                     if(results_found == 1)
                         first_result_location = places[i].location;
-                    content = '<p>' + distance_text + '<br/>';
+                    content = '<p>' + distance_text + ", ";
                     content += duration_text + '</p>\n';
                     content += '<button id="show-directions-btn" ';
                     content += 'onclick="show_directions(&quot;';
@@ -534,7 +534,7 @@ function show_markers_withIn_time(response)
     if(results_found > 0)
     {
         if(results_found > 1)
-            setInterval( function() { map.fitBounds(new_bounds) }, 1000);
+            setTimeout( function() { map.fitBounds(new_bounds) }, 1000);
         else
         {
             map.setCenter(first_result_location);
