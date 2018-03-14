@@ -75,7 +75,7 @@ html, body, div, h1, h4, main, input, button, select, option
 {
     bottom: 9.5mm;
     right: 12mm;
-    width: calc(100% - 48mm);
+    width: calc(100% - 46.5mm);
     max-width: 66.66mm;
     min-width: 37mm;
 }

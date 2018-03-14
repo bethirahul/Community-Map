@@ -180,6 +180,7 @@ function toggle_drawing(btn)
     else
     {
         drawing_manager.setMap(map);
+        drawing_manager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
         btn.innerHTML = "Hide drawing tools";
     }
 }
