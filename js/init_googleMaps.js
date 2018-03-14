@@ -59,6 +59,8 @@ var selected_marker_icon;
 var drawing_manager;
 var polygon;
 
+var directionsDisplay;
+
 var center = { lat: 37.402349, lng: -121.927459 }
 
 function initMap()
@@ -241,6 +243,10 @@ function initMap()
             // close polygon
             if(polygon)
                 polygon.setMap(null);
+            
+            if(directionsDisplay)
+                if(directionsDisplay.getMap())
+                    directionsDisplay.setMap(null);
 
             // Close all markers
             //reset_all_markers_icons();
@@ -428,6 +434,10 @@ function searchWithInTime(event=null)
     
     if(address != '')
     {
+        if(directionsDisplay)
+            if(directionsDisplay.getMap())
+                directionsDisplay.setMap(null);
+        
         var travelMode = google.maps.TravelMode[
             document.getElementById('searchWithInTime-mode-select').value
         ];
@@ -490,7 +500,6 @@ function show_markers_withIn_time(response)
         {
             if(elements[j].status === 'OK')
             {
-                
                 distance_text = elements[j].distance.text;
                 duration = elements[j].duration.value; // in seconds
                 duration_text = elements[j].duration.text;
@@ -501,7 +510,12 @@ function show_markers_withIn_time(response)
                     results_found++;
                     if(results_found == 1)
                         first_result_location = places[i].location;
-                    places[i].set_infoWindow(distance_text + "<br/>" + duration_text);
+                    content = '<p>' + distance_text + '<br/>';
+                    content += duration_text + '</p>\n';
+                    content += '<button id="show-directions-btn" ';
+                    content += 'onclick="show_directions(&quot;';
+                    content += origins[i] + '&quot;)">Show Directions</button>';
+                    places[i].set_infoWindow(content);
                 }
                 else
                     places[i].showHide_marker(false);
@@ -520,4 +534,41 @@ function show_markers_withIn_time(response)
     }
     else
         alert("No results were found with that address.");
+}
+
+function show_directions(origin)
+{
+    var destination = document.getElementById('searchWithInTime-addressBar').value;
+    var travelMode = google.maps.TravelMode[
+        document.getElementById('searchWithInTime-mode-select').value
+    ];
+
+    var directionsService = new google.maps.DirectionsService;
+    directionsService.route(
+        {
+            origin: origin,
+            destination: destination,
+            travelMode: travelMode,
+            provideRouteAlternatives: true
+        },
+        // call-back function
+        function(response, status)
+        {
+            if(status === google.maps.DirectionsStatus.OK)
+            {
+                directionsDisplay = new google.maps.DirectionsRenderer(
+                    {
+                        map:map,
+                        directions: response,
+                        draggable: true,
+                        polylineOptions: {
+                            strokeColor: 'DodgerBlue'
+                        }
+                    }
+                );
+            }
+            else
+                alert("Directions request Error: " + status);
+        }
+    );
 }

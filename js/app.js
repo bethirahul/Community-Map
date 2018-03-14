@@ -149,6 +149,10 @@ function showHide_all_markers(state)
         if(polygon)
             polygon.setMap(null);
 
+        if(directionsDisplay)
+            if(directionsDisplay.getMap())
+                directionsDisplay.setMap(null);
+
         for(var i=0; i<places.length; i++)
             places[i].showHide_marker(state);
 
@@ -229,5 +233,9 @@ function toggle_searchWithIn(btn)
         search.style.display = 'none';
         btn.innerHTML = 'Show Search';
         close_places_infoWindows();
+        
+        if(directionsDisplay)
+            if(directionsDisplay.getMap())
+                directionsDisplay.setMap(null);
     }
 }
