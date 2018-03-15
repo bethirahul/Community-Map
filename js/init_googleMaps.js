@@ -203,6 +203,7 @@ function initMap()
             //styles: styles,
             // Optional: To disable [Map,Satellite,..] buttons, true by default
             mapTypeControl: true,
+            disableDoubleClickZoom: true,
             // Optional: For extra map types or restrict them
             mapTypeControlOptions: {
                 style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,

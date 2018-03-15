@@ -248,7 +248,7 @@ function toggle_searchWithIn(btn)
     else
     {
         search.style.display = 'none';
-        btn.innerHTML = 'Show Search';
+        btn.innerHTML = 'Search with-in<br/>Travel time';
         close_places_infoWindows();
         
         if(directionsDisplay)
@@ -279,5 +279,5 @@ var Search_result = function()
 {
     var self = this;
     
-    self.marker = new google.maps.Marker
+    //self.marker = new google.maps.Marker
 }
