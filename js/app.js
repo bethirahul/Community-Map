@@ -153,7 +153,7 @@ function reset_all_infoWindows_zIndex()
 
 function bring_to_front(id)
 {
-    console.log(id);
+    close_main_infoWindow();
     reset_all_infoWindows_zIndex();
     places[id].infoWindow.setZIndex(2);
 }
@@ -188,20 +188,6 @@ function close_places_infoWindows()
 
 function start_drawing()
 {
-    /*if(drawing_manager.map)
-    {
-        drawing_manager.setMap(null);
-        if(polygon)
-            polygon.setMap(null);
-        btn.innerHTML = "Search with-in area";
-    }
-    else
-    {
-        drawing_manager.setMap(map);
-        drawing_manager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
-        btn.innerHTML = "Hide drawing tools";
-    }*/
-
     if(polygon)
         polygon.setMap(null);
     init_drawing_manager();
@@ -215,23 +201,9 @@ function start_drawing()
 function zoomIn_to_address(event=null)
 {
     if(event)
-    {
         if(event.key !== 'Enter')
-        {
-            /*var pac_container =
-                    document.getElementsByClassName('pac-container')[0];
-            if(pac_container)
-                console.log("Found .pac-container");
-            pac_container.style.position = 'absolute';
-            pac_container.style.bottom = '10mm';*/
-
-            /*pac = $('.pac-container');
-            pac.css('position', 'absolute');
-            pac.css('top', 'calc(100vh - 50mm)');*/
-            
             return;
-        }
-    }
+
     var address_bar = document.getElementById('zoomIn-addressBar');
     if(address_bar.value != '')
     {

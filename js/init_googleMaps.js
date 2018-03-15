@@ -240,6 +240,7 @@ function initMap()
     // Create an main_infoWindow
     main_infoWindow = new google.maps.InfoWindow();
     main_infoWindow.addListener('closeclick', close_main_infoWindow);
+    main_infoWindow.setZIndex(2);
 
     // Create Bounds
     bounds = new google.maps.LatLngBounds();
@@ -571,7 +572,7 @@ function show_directions(origin)
     if(directionsDisplay)
         if(directionsDisplay.getMap())
             directionsDisplay.setMap(null);
-            
+
     var destination = document.getElementById('searchWithInTime-addressBar').value;
     var travelMode = google.maps.TravelMode[
         document.getElementById('searchWithInTime-mode-select').value
