@@ -203,7 +203,6 @@ function initMap()
             //styles: styles,
             // Optional: To disable [Map,Satellite,..] buttons, true by default
             mapTypeControl: true,
-            disableDoubleClickZoom: true,
             // Optional: For extra map types or restrict them
             mapTypeControlOptions: {
                 style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
@@ -235,10 +234,10 @@ function initMap()
     zoomIn_autoComplete.bindTo('bounds', map);
 
     // Drawing mode
-    drawing_manager = new google.maps.drawing.DrawingManager(
+    /*drawing_manager = new google.maps.drawing.DrawingManager(
         {
             drawingMode: google.maps.drawing.OverlayType.POLYGON,
-            drawingControl: true,
+            drawingControl: false,
             drawingControlOptions: {
                 position: google.maps.ControlPosition.TOP_LEFT,
                 drawingModes: [
@@ -287,7 +286,11 @@ function initMap()
 
             search_within_polygon();
         }
-    );
+    );*/
+
+    init_drawing_manager();
+    cancel_btn = document.getElementById('cancel-drawing-btn');
+    cancel_btn.style.display = 'none';
 
     // Create an main_infoWindow
     main_infoWindow = new google.maps.InfoWindow();
@@ -309,13 +312,80 @@ function initMap()
     createPlaces();
 }
 
+function init_drawing_manager()
+{
+    if(drawing_manager)
+        drawing_manager.setMap(null);
+    
+    cancel_btn = document.getElementById('cancel-drawing-btn');
+    cancel_btn.style.display = 'block';
+    cancel_btn.innerHTML = 'Cancel drawing';
+
+    drawing_manager = new google.maps.drawing.DrawingManager(
+        {
+            drawingMode: google.maps.drawing.OverlayType.POLYGON,
+            drawingControl: false,
+            drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_LEFT,
+                drawingModes: [
+                    google.maps.drawing.OverlayType.POLYGON
+                ]
+            }
+        }
+    );
+    // Event listener when polygon is complete
+    drawing_manager.addListener(
+        'overlaycomplete',
+        function(event)
+        {
+            // close polygon
+            if(polygon)
+                polygon.setMap(null);
+            
+            if(directionsDisplay)
+                if(directionsDisplay.getMap())
+                    directionsDisplay.setMap(null);
+            
+            var cancel_btn = document.getElementById('cancel-drawing-btn');
+            cancel_btn.innerHTML = "Clear Area";
+
+            // Close all markers
+            //reset_all_markers_icons();
+            for(var i=0; i<places.length; i++)
+                places[i].showHide_marker(false);
+
+            // Switch to hand mode, no more drawing.
+            drawing_manager.setDrawingMode(null);
+
+            // new polygon from the completed one
+            polygon = event.overlay;
+
+            // make this newly created polygon as editable
+            polygon.setEditable(true);
+            // add event listeners tho this newly created polygon
+            // which trigger when it is edited.
+            polygon.getPath().addListener(
+                'set_at',
+                search_within_polygon
+            );
+            polygon.getPath().addListener(
+                'insert_at',
+                search_within_polygon
+            );
+            polygon.addListener('click', close_main_infoWindow);
+
+            search_within_polygon();
+        }
+    );
+}
+
 function search_within_polygon()
 {
     area = google.maps.geometry.spherical.computeArea(polygon.getPath());
     alert(area + " square meters");
     // Close main_infoWindow
-    if(main_infoWindow.marker)
-        close_main_infoWindow();
+    /*if(main_infoWindow.marker)
+        close_main_infoWindow();*/
     
     // Show/Hide markers
     for(var i=0; i<places.length; i++)
@@ -536,6 +606,7 @@ function show_markers_withIn_time(response)
     }
     if(results_found > 0)
     {
+        close_drawing_manager();
         if(results_found > 1)
             setTimeout( function() { map.fitBounds(new_bounds) }, 1000);
         else
@@ -583,4 +654,22 @@ function show_directions(origin)
                 alert("Directions request Error: " + status);
         }
     );
+}
+
+function close_drawing_manager()
+{
+    if(drawing_manager)
+    {
+        drawing_manager.setMap(null);
+        drawing_manager = null;
+    }
+    cancel_btn = document.getElementById('cancel-drawing-btn');
+    cancel_btn.style.display = 'none';
+}
+
+function clear_drawing()
+{
+    close_drawing_manager();
+    if(polygon)
+        polygon.setMap(null);
 }

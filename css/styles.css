@@ -73,6 +73,13 @@ button, input
     left: 1.5mm;
 }
 
+#cancel-drawing-btn
+{
+    display: none;
+    bottom: 19.5mm;
+    left: 1.5mm;
+}
+
 /* Info-Window */
 #infoWindow
 {
@@ -104,7 +111,9 @@ button, input
 /* Search Module */
 #searchWithInTime-toggle-btn
 {
-    top: 2.5mm;
+    width: 27mm;
+    height: 10mm;
+    top: 1.5mm;
     right: 1.5mm;
 }
 
@@ -115,7 +124,7 @@ button, input
 
 #searchWithInTime-addressBar
 {
-    top: 10mm;
+    top: 12.5mm;
     right: 1.5mm;
     width: calc(100% - 35.5mm);
     max-width: 75mm;
@@ -124,18 +133,32 @@ button, input
 
 #searchWithInTime-btn
 {
-    top: 16mm;
+    width: 14.5mm;
+    height: 6mm;
+    top: 19mm;
     right: 1.5mm;
 }
 
 #searchWithInTime-range-select
 {
-    top: 16mm;
-    right: 15.5mm;
+    width: 20mm;
+    height: 6mm;
+    top: 19mm;
+    right: 17mm;
 }
 
 #searchWithInTime-mode-select
 {
-    top: 16mm;
-    right: 34.5mm;
+    width: 21mm;
+    height: 6mm;
+    top: 19mm;
+    right: 38mm;
+}
+
+#searchPlaces-toggle-btn
+{
+    width: 15mm;
+    height: 10mm;
+    top: 1.5mm;
+    right: 30mm;
 }

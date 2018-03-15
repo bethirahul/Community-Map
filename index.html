@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Community Map</title>
   <link rel="stylesheet" href="css/styles.css" media="screen">
@@ -22,8 +24,11 @@
         </button>
       </div>
     <button id="toggle-drawing-btn" class="on-map"
-        onclick="toggle_drawing(this)">
+        onclick="start_drawing()">
       Search with-in area
+    </button>
+    <button id="cancel-drawing-btn" class="on-map"
+        onclick="clear_drawing()">
     </button>
     <button id="zoomIn-btn" class="on-map" onclick="zoomIn_to_address()">
       Zoom
@@ -65,6 +70,10 @@
         <option value="TRANSIT">Transit</option>
       </select>
     </div>
+    <button id="searchPlaces-toggle-btn" class="on-map"
+        onclick="toggle_searchPlaces">
+      Search<br/>Places
+    </button>
   </main>
 
   <!-- ====== J A V A S C R I P T ========================================== -->

@@ -69,6 +69,10 @@ var Place = function(id, name, {lat, lng}, description)
 
     self.showHide_marker = function(state)
     {
+        if(main_infoWindow.marker == self.marker)
+            close_main_infoWindow();
+        self.close_infoWindow();
+        
         if(self.marker.getVisible() != state)
         {
             self.marker.setVisible(state);
@@ -79,8 +83,8 @@ var Place = function(id, name, {lat, lng}, description)
             }
             else
             {
-                if(main_infoWindow.marker == self.marker)
-                    close_main_infoWindow();
+                /*if(main_infoWindow.marker == self.marker)
+                    close_main_infoWindow();*/
                 self.close_infoWindow();
             }
         }
@@ -168,9 +172,9 @@ function close_places_infoWindows()
         places[i].close_infoWindow();
 }
 
-function toggle_drawing(btn)
+function start_drawing()
 {
-    if(drawing_manager.map)
+    /*if(drawing_manager.map)
     {
         drawing_manager.setMap(null);
         if(polygon)
@@ -182,7 +186,16 @@ function toggle_drawing(btn)
         drawing_manager.setMap(map);
         drawing_manager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
         btn.innerHTML = "Hide drawing tools";
-    }
+    }*/
+
+    if(polygon)
+        polygon.setMap(null);
+    init_drawing_manager();
+    drawing_manager.setMap(map);
+    //drawing_manager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
+    close_main_infoWindow();
+    for(var i=0; i<places.length; i++)
+        places[i].close_infoWindow();
 }
 
 function zoomIn_to_address(event=null)
@@ -242,6 +255,28 @@ function toggle_searchWithIn(btn)
     initial_state = search.style.display;
     if(initial_state == 'none' || initial_state == '')
     {
+        showHide_searchWithInTime(true);
+        //close_main_infoWindow();
+        //-------- Check if seach places is open and close it
+    }
+    else
+    {
+        showHide_searchWithInTime(false);
+
+        close_places_infoWindows();
+        
+        if(directionsDisplay)
+            if(directionsDisplay.getMap())
+                directionsDisplay.setMap(null);
+    }
+}
+
+function showHide_searchWithInTime(state)
+{
+    search = document.getElementById('searchWithInTime');
+    btn = document.getElementById('searchWithInTime-toggle-btn');
+    if(state)
+    {
         search.style.display = 'block';
         btn.innerHTML = 'Hide Search';
     }
@@ -249,11 +284,6 @@ function toggle_searchWithIn(btn)
     {
         search.style.display = 'none';
         btn.innerHTML = 'Search with-in<br/>Travel time';
-        close_places_infoWindows();
-        
-        if(directionsDisplay)
-            if(directionsDisplay.getMap())
-                directionsDisplay.setMap(null);
     }
 }
 
