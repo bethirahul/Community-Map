@@ -621,5 +621,16 @@ function clear_drawing()
 
 function search_otherPlaces(event=null)
 {
+    if(event)
+        if(event.key !== 'Enter')
+            return;
 
+    var address = document.getElementById('searchWithInTime-addressBar').value;
+    
+    if(address != '')
+    {
+        console.log(address);
+    }
+    else
+        alert("Type in an address or place or a key word to get results.");
 }

@@ -251,24 +251,16 @@ function zoomIn_to_address(event=null)
 
 function toggle_searchWithIn(btn)
 {
-    search = document.getElementById('searchWithInTime');
-    initial_state = search.style.display;
+    var search = document.getElementById('searchWithInTime');
+    var initial_state = search.style.display;
     if(initial_state == 'none' || initial_state == '')
     {
         showHide_searchWithInTime(true);
-        //close_main_infoWindow();
         //-------- Check if seach places is open and close it
+        showHide_searchPlaces(false);
     }
     else
-    {
         showHide_searchWithInTime(false);
-
-        close_places_infoWindows();
-        
-        if(directionsDisplay)
-            if(directionsDisplay.getMap())
-                directionsDisplay.setMap(null);
-    }
 }
 
 function showHide_searchWithInTime(state)
@@ -284,7 +276,50 @@ function showHide_searchWithInTime(state)
     {
         search.style.display = 'none';
         btn.innerHTML = 'Search with-in<br/>Travel time';
+
+        close_places_infoWindows();
+        
+        if(directionsDisplay)
+            if(directionsDisplay.getMap())
+                directionsDisplay.setMap(null);
     }
+}
+
+function toggle_searchPlaces(btn)
+{
+    var search = document.getElementById('searchPlaces');
+    var initial_state = search.style.display;
+    if(initial_state == 'none' || initial_state == '')
+    {
+        showHide_searchPlaces(true);
+        //-------- Check if seach places is open and close it
+        showHide_searchWithInTime(false);
+    }
+    else
+        showHide_searchPlaces(false);
+}
+
+function showHide_searchPlaces(state)
+{
+    search = document.getElementById('searchPlaces');
+    btn = document.getElementById('searchPlaces-toggle-btn');
+    if(state)
+    {
+        search.style.display = 'block';
+        btn.innerHTML = 'Hide Search';
+    }
+    else
+    {
+        search.style.display = 'none';
+        btn.innerHTML = 'Search<br/>other places';
+    }
+}
+
+var Search_result = function()
+{
+    var self = this;
+    
+    //self.marker = new google.maps.Marker
 }
 
 function adjustRevert_autoComplete_style(state)
@@ -302,17 +337,4 @@ function adjustRevert_autoComplete_style(state)
     }
     else
         pac_styleSheet.innerHTML = '';
-}
-
-
-var Search_result = function()
-{
-    var self = this;
-    
-    //self.marker = new google.maps.Marker
-}
-
-function toggle_searchPlaces(btn)
-{
-    
 }
