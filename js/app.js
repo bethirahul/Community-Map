@@ -30,7 +30,7 @@ var Place = function(id, name, {lat, lng}, description)
         self.infoWindow.marker = self.marker;
         self.infoWindow.setContent(content);
         self.infoWindow.open(map, self.marker);
-        self.infoWindow.setZIndex(id);
+        self.infoWindow.setZIndex(id+1);
     }
 
     self.close_infoWindow = function()
@@ -149,14 +149,21 @@ function print_places()
 function reset_all_infoWindows_zIndex()
 {
     for(var i=0; i<places.length; i++)
-        places[i].infoWindow.setZIndex(1);
+        places[i].infoWindow.setZIndex(i);
 }
 
 function bring_to_front(id)
 {
     close_main_infoWindow();
-    //reset_all_infoWindows_zIndex();
-    places[id].infoWindow.setZIndex(2);
+    
+    var zIndex_of_id = places[id].infoWindow.getZIndex();
+    for(var i=0; i<places.length; i++)
+    {
+        var zIndex_of_i = places[i].infoWindow.getZIndex();
+        if(id != i && zIndex_of_i > zIndex_of_id)
+            places[i].infoWindow.setZIndex(zIndex_of_i - 1);
+    }
+    places[id].infoWindow.setZIndex(places.length);
 }
 
 function showHide_all_markers(state)

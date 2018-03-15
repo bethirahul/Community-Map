@@ -51,6 +51,8 @@ var map;
 
 var main_infoWindow;
 var mainInfoWindow_place_id;
+var search_infoWindow;
+var searchInfoWindow_place_id;
 var bounds;
 var default_marker_icon;
 var hover_marker_icon;
@@ -256,7 +258,7 @@ function initMap()
 
     createPlaces();
 
-    main_infoWindow.setZIndex(places.length);
+    //main_infoWindow.setZIndex(places.length+1);
 }
 
 function init_drawing_manager()
@@ -392,6 +394,7 @@ function set_mainInfoWindow(id)
                 content += '<div id="panorama"></div>';
                 main_infoWindow.setContent(content);
                 main_infoWindow.open(map, places[id].marker);
+                main_infoWindow.setZIndex(places.length+1);
 
                 var panorama_options = {
                     position: nearBy_streetView_location,
