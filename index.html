@@ -16,11 +16,11 @@
       <div id="toggle-markers"></div>
         <button id="show-markers-btn" class="on-map"
             onclick="showHide_all_markers(true)">
-          Show all Markers
+          Show all places
         </button>
         <button id="hide-markers-btn" class="on-map"
             onclick="showHide_all_markers(false)">
-          Hide all Markers
+          Hide all places
         </button>
       </div>
     <button id="toggle-drawing-btn" class="on-map"
@@ -71,9 +71,22 @@
       </select>
     </div>
     <button id="searchPlaces-toggle-btn" class="on-map"
-        onclick="toggle_searchPlaces">
-      Search<br/>Places
+        onclick="toggle_searchPlaces(this)">
+      Search other places
     </button>
+    <div id="searchPlaces">
+      <input
+          id="searchPlaces-addressBar" class="on-map"
+          placeholder="Enter a place name or key words"
+          onfocus="adjustRevert_autoComplete_style(false)"
+          onkeypress="search_otherPlaces(event)">
+      </input>
+      <button
+          id="searchPlaces-btn" class="on-map"
+          onclick="search_otherPlaces()">
+        Search
+      </button>
+    </div>
   </main>
 
   <!-- ====== J A V A S C R I P T ========================================== -->

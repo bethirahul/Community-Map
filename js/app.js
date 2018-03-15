@@ -293,7 +293,7 @@ function adjustRevert_autoComplete_style(state)
     
     if(state)
     {
-        pac_height = "58mm"
+        pac_height = "52mm"
         bar_height = document.getElementById("zoomIn-addressBar").clientHeight;
         rule = ".pac-container { "
         rule += "top: calc(100% - " + bar_height + "px - " + pac_height + ")";
@@ -310,4 +310,9 @@ var Search_result = function()
     var self = this;
     
     //self.marker = new google.maps.Marker
+}
+
+function toggle_searchPlaces(btn)
+{
+    
 }
