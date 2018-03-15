@@ -44,7 +44,7 @@ button, input
 .on-map
 {
     position: absolute;
-    z-index: 99;
+    z-index: 1;
 }
 
 /* Show/Hide all Markers */

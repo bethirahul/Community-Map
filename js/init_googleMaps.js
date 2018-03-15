@@ -189,7 +189,7 @@ function initMap()
                 stylers: [{color: '#6d7269'}]
             }
         ],
-        { name: 'Styled' }
+        { name: 'Map' }
     );
 
     // Creates Google Maps at the DOM element which has an id map; with
@@ -205,16 +205,11 @@ function initMap()
             mapTypeControl: true,
             // Optional: For extra map types or restrict them
             mapTypeControlOptions: {
-                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-                mapTypeIds: [
-                    'roadmap',
-                    'satellite',
-                    'hybrid',
-                    'terrain',
-                    'my_style'
-                ]
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                mapTypeIds: ['my_style', 'terrain', 'hybrid']
             },
-            fullscreenControl: false
+            fullscreenControl: false,
+            streetViewControl: false
         }
     );
 
@@ -225,68 +220,18 @@ function initMap()
     map.addListener('click', close_main_infoWindow);
 
     // Auto-complete
-    searchWithInTime_autoComplete = new google.maps.places.Autocomplete(
+    var searchWithInTime_autoComplete = new google.maps.places.Autocomplete(
         document.getElementById('searchWithInTime-addressBar')
     );
-    zoomIn_autoComplete = new google.maps.places.Autocomplete(
+
+    var zoomIn_autoComplete = new google.maps.places.Autocomplete(
         document.getElementById('zoomIn-addressBar')
     );
     zoomIn_autoComplete.bindTo('bounds', map);
 
-    // Drawing mode
-    /*drawing_manager = new google.maps.drawing.DrawingManager(
-        {
-            drawingMode: google.maps.drawing.OverlayType.POLYGON,
-            drawingControl: false,
-            drawingControlOptions: {
-                position: google.maps.ControlPosition.TOP_LEFT,
-                drawingModes: [
-                    google.maps.drawing.OverlayType.POLYGON
-                ]
-            }
-        }
+    var searchPlaces_autoComplete = new google.maps.places.Autocomplete(
+        document.getElementById('searchPlaces-addressBar')
     );
-    // Event listener when polygon is complete
-    drawing_manager.addListener(
-        'overlaycomplete',
-        function(event)
-        {
-            // close polygon
-            if(polygon)
-                polygon.setMap(null);
-            
-            if(directionsDisplay)
-                if(directionsDisplay.getMap())
-                    directionsDisplay.setMap(null);
-
-            // Close all markers
-            //reset_all_markers_icons();
-            for(var i=0; i<places.length; i++)
-                places[i].showHide_marker(false);
-
-            // Switch to hand mode, no more drawing.
-            drawing_manager.setDrawingMode(null);
-
-            // new polygon from the completed one
-            polygon = event.overlay;
-
-            // make this newly created polygon as editable
-            polygon.setEditable(true);
-            // add event listeners tho this newly created polygon
-            // which trigger when it is edited.
-            polygon.getPath().addListener(
-                'set_at',
-                search_within_polygon
-            );
-            polygon.getPath().addListener(
-                'insert_at',
-                search_within_polygon
-            );
-            polygon.addListener('click', close_main_infoWindow);
-
-            search_within_polygon();
-        }
-    );*/
 
     init_drawing_manager();
     cancel_btn = document.getElementById('cancel-drawing-btn');
@@ -672,4 +617,9 @@ function clear_drawing()
     close_drawing_manager();
     if(polygon)
         polygon.setMap(null);
+}
+
+function search_otherPlaces(event=null)
+{
+
 }
