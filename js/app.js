@@ -47,7 +47,7 @@ var Place = function(id, name, {lat, lng}, description)
         'mouseover',
         function()
         {
-            if(mainInfoWindow.marker != self.marker)
+            if(main_infoWindow.marker != self.marker)
                 this.setIcon(hover_marker_icon);
         }
     )
@@ -55,7 +55,7 @@ var Place = function(id, name, {lat, lng}, description)
         'mouseout',
         function()
         {
-            if(mainInfoWindow.marker != self.marker)
+            if(main_infoWindow.marker != self.marker)
                 this.setIcon(default_marker_icon);
         }
     )
@@ -79,8 +79,8 @@ var Place = function(id, name, {lat, lng}, description)
             }
             else
             {
-                if(mainInfoWindow.marker == self.marker)
-                    close_mainInfoWindow();
+                if(main_infoWindow.marker == self.marker)
+                    close_main_infoWindow();
                 self.close_infoWindow();
             }
         }
@@ -144,7 +144,7 @@ function showHide_all_markers(state)
 {
     if(places[0])
     {
-        close_mainInfoWindow();
+        close_main_infoWindow();
         close_places_infoWindows();
 
         if(polygon)
@@ -272,4 +272,12 @@ function adjustRevert_autoComplete_style(state)
     }
     else
         pac_styleSheet.innerHTML = '';
+}
+
+
+var Search_result = function()
+{
+    var self = this;
+    
+    self.marker = new google.maps.Marker
 }

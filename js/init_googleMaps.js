@@ -37,19 +37,19 @@ function make_url(url, parameters={})
     url = make_url(url, parameters);
 
     var body = document.getElementsByTagName('body')[0];
-    var theScript = document.createElement('script');
-    theScript.type = 'text/javascript';
-    theScript.src = url;
-    theScript.async = true;
-    theScript.defer = true;
-    body.appendChild(theScript);
+    var g_script = document.createElement('script');
+    g_script.type = 'text/javascript';
+    g_script.src = url;
+    g_script.async = true;
+    g_script.defer = true;
+    body.appendChild(g_script);
 })();
 
 //==============================================================================
 
 var map;
 
-var mainInfoWindow;
+var main_infoWindow;
 var mainInfoWindow_place_id;
 var bounds;
 var default_marker_icon;
@@ -60,6 +60,8 @@ var drawing_manager;
 var polygon;
 
 var directionsDisplay;
+
+var search_infoWindow;
 
 var center = { lat: 37.402349, lng: -121.927459 }
 
@@ -220,7 +222,7 @@ function initMap()
     map.mapTypes.set('my_style', my_styledMapType);
     map.setMapTypeId('my_style');
 
-    map.addListener('click', close_mainInfoWindow);
+    map.addListener('click', close_main_infoWindow);
 
     // Auto-complete
     searchWithInTime_autoComplete = new google.maps.places.Autocomplete(
@@ -280,15 +282,15 @@ function initMap()
                 'insert_at',
                 search_within_polygon
             );
-            polygon.addListener('click', close_mainInfoWindow);
+            polygon.addListener('click', close_main_infoWindow);
 
             search_within_polygon();
         }
     );
 
-    // Create an mainInfoWindow
-    mainInfoWindow = new google.maps.InfoWindow();
-    mainInfoWindow.addListener('closeclick', close_mainInfoWindow);
+    // Create an main_infoWindow
+    main_infoWindow = new google.maps.InfoWindow();
+    main_infoWindow.addListener('closeclick', close_main_infoWindow);
 
     // Create Bounds
     bounds = new google.maps.LatLngBounds();
@@ -310,9 +312,9 @@ function search_within_polygon()
 {
     area = google.maps.geometry.spherical.computeArea(polygon.getPath());
     alert(area + " square meters");
-    // Close mainInfoWindow
-    if(mainInfoWindow.marker)
-        close_mainInfoWindow();
+    // Close main_infoWindow
+    if(main_infoWindow.marker)
+        close_main_infoWindow();
     
     // Show/Hide markers
     for(var i=0; i<places.length; i++)
@@ -331,12 +333,12 @@ function set_mainInfoWindow(id)
 {
     // To stop setting and opening info window if already open at the same
     // marker
-    if(mainInfoWindow.marker != places[id].marker)
+    if(main_infoWindow.marker != places[id].marker)
     {
         //infoWindow.setContent(content);
-        if(mainInfoWindow.marker != null)
+        if(main_infoWindow.marker != null)
         {
-            mainInfoWindow.marker.setIcon(default_marker_icon);
+            main_infoWindow.marker.setIcon(default_marker_icon);
             if(places[mainInfoWindow_place_id].infoWindow.marker != null)
                 places[mainInfoWindow_place_id].infoWindow.open(
                     map,
@@ -346,8 +348,8 @@ function set_mainInfoWindow(id)
 
         mainInfoWindow_place_id = id;
 
-        mainInfoWindow.marker = places[id].marker;
-        mainInfoWindow.marker.setIcon(selected_marker_icon);
+        main_infoWindow.marker = places[id].marker;
+        main_infoWindow.marker.setIcon(selected_marker_icon);
 
         if(places[id].infoWindow.marker == places[id].marker)
             places[id].infoWindow.close();
@@ -370,8 +372,8 @@ function set_mainInfoWindow(id)
                 );
 
                 content += '<div id="panorama"></div>';
-                mainInfoWindow.setContent(content);
-                mainInfoWindow.open(map, places[id].marker);
+                main_infoWindow.setContent(content);
+                main_infoWindow.open(map, places[id].marker);
 
                 var panorama_options = {
                     position: nearBy_streetView_location,
@@ -389,8 +391,8 @@ function set_mainInfoWindow(id)
             else
             {
                 content += '<div>Loading Street View Failed!</div>';
-                mainInfoWindow.setContent(content);
-                mainInfoWindow.open(map, places[id].marker);
+                main_infoWindow.setContent(content);
+                main_infoWindow.open(map, places[id].marker);
             }
         }
 
@@ -402,18 +404,18 @@ function set_mainInfoWindow(id)
     }
 }
 
-function close_mainInfoWindow()
+function close_main_infoWindow()
 {
-    if(mainInfoWindow.marker != null)
+    if(main_infoWindow.marker != null)
     {
-        mainInfoWindow.marker.setIcon(default_marker_icon);
+        main_infoWindow.marker.setIcon(default_marker_icon);
         if(places[mainInfoWindow_place_id].infoWindow.marker != null)
             places[mainInfoWindow_place_id].infoWindow.open(
                 map,
                 places[mainInfoWindow_place_id].marker
             );
-        mainInfoWindow.marker = null;
-        mainInfoWindow.close();
+        main_infoWindow.marker = null;
+        main_infoWindow.close();
     }
 }
 
