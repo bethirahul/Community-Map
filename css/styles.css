@@ -6,7 +6,7 @@ html, body
     font-size: 1em;
 }
 
-html, body, div, h1, h4, main, select, option, button, input
+html, body, div, h1, h4, main, select, option, button, input, p
 {
     margin: 0;
     padding: 0;

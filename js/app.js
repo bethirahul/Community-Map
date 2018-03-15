@@ -30,6 +30,7 @@ var Place = function(id, name, {lat, lng}, description)
         self.infoWindow.marker = self.marker;
         self.infoWindow.setContent(content);
         self.infoWindow.open(map, self.marker);
+        self.infoWindow.setZIndex(1);
     }
 
     self.close_infoWindow = function()
@@ -144,6 +145,19 @@ function print_places()
     }
 }
 
+function reset_all_infoWindows_zIndex()
+{
+    for(var i=0; i<places.length; i++)
+        places[i].infoWindow.setZIndex(1);
+}
+
+function bring_to_front(id)
+{
+    console.log(id);
+    reset_all_infoWindows_zIndex();
+    places[id].infoWindow.setZIndex(2);
+}
+
 function showHide_all_markers(state)
 {
     if(places[0])
@@ -256,7 +270,6 @@ function toggle_searchWithIn(btn)
     if(initial_state == 'none' || initial_state == '')
     {
         showHide_searchWithInTime(true);
-        //-------- Check if seach places is open and close it
         showHide_searchPlaces(false);
     }
     else
@@ -292,7 +305,6 @@ function toggle_searchPlaces(btn)
     if(initial_state == 'none' || initial_state == '')
     {
         showHide_searchPlaces(true);
-        //-------- Check if seach places is open and close it
         showHide_searchWithInTime(false);
     }
     else
@@ -315,13 +327,6 @@ function showHide_searchPlaces(state)
     }
 }
 
-var Search_result = function()
-{
-    var self = this;
-    
-    //self.marker = new google.maps.Marker
-}
-
 function adjustRevert_autoComplete_style(state)
 {
     var pac_styleSheet = document.getElementById('pac-style');
@@ -337,4 +342,11 @@ function adjustRevert_autoComplete_style(state)
     }
     else
         pac_styleSheet.innerHTML = '';
+}
+
+var Search_result = function()
+{
+    var self = this;
+    
+    //self.marker = new google.maps.Marker
 }

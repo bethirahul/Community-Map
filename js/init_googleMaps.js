@@ -537,11 +537,13 @@ function show_markers_withIn_time(response)
                     results_found++;
                     if(results_found == 1)
                         first_result_location = places[i].location;
-                    content = '<p>' + distance_text + ", ";
+                    var content = '<div onclick=bring_to_front(' + i + ')>';
+                    content += '<p>' + distance_text + ", ";
                     content += duration_text + '</p>\n';
                     content += '<button id="show-directions-btn" ';
                     content += 'onclick="show_directions(&quot;';
                     content += origins[i] + '&quot;)">Show Directions</button>';
+                    content += '</div>';
                     places[i].set_infoWindow(content);
                 }
                 else
@@ -566,6 +568,10 @@ function show_markers_withIn_time(response)
 
 function show_directions(origin)
 {
+    if(directionsDisplay)
+        if(directionsDisplay.getMap())
+            directionsDisplay.setMap(null);
+            
     var destination = document.getElementById('searchWithInTime-addressBar').value;
     var travelMode = google.maps.TravelMode[
         document.getElementById('searchWithInTime-mode-select').value
