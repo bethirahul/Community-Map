@@ -324,9 +324,45 @@ function adjustRevert_autoComplete_style(state)
         pac_styleSheet.innerHTML = '';
 }
 
-var Search_result = function()
+var Search_result = function(id, {lat, lng}, name)
 {
     var self = this;
-    
-    //self.marker = new google.maps.Marker
+
+    self.id = id;
+    self.name = name;
+    self.location = {lat, lng};
+    self.marker = new google.maps.Marker(
+        {
+            id: self.id,
+            position: self.location,
+            map: map,
+            title: self.name,
+            icon: default_marker_icon,
+            animation: google.maps.Animation.DROP
+        }
+    );
+
+    self.marker.addListener(
+        'mouseover',
+        function()
+        {
+            if(search_infoWindow.marker != self.marker)
+                this.setIcon(hover_marker_icon);
+        }
+    )
+    self.marker.addListener(
+        'mouseout',
+        function()
+        {
+            if(search_infoWindow.marker != self.marker)
+                this.setIcon(default_marker_icon);
+        }
+    )
+    self.marker.addListener(
+        'click',
+        function()
+        {
+            set_searchInfoWindow(self.id);
+        }
+    )
 }

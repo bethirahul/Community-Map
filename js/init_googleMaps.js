@@ -646,3 +646,8 @@ function search_otherPlaces(event=null)
     else
         alert("Type in an address or place or a key word to get results.");
 }
+
+function set_searchInfoWindow(id)
+{
+    
+}
