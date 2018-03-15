@@ -30,7 +30,7 @@ var Place = function(id, name, {lat, lng}, description)
         self.infoWindow.marker = self.marker;
         self.infoWindow.setContent(content);
         self.infoWindow.open(map, self.marker);
-        self.infoWindow.setZIndex(1);
+        self.infoWindow.setZIndex(id);
     }
 
     self.close_infoWindow = function()
@@ -130,6 +130,7 @@ function createPlaces()
             console.log(error);
         }
     );
+
 }
 
 function print_places()
@@ -154,7 +155,7 @@ function reset_all_infoWindows_zIndex()
 function bring_to_front(id)
 {
     close_main_infoWindow();
-    reset_all_infoWindows_zIndex();
+    //reset_all_infoWindows_zIndex();
     places[id].infoWindow.setZIndex(2);
 }
 

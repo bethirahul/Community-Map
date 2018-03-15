@@ -240,7 +240,6 @@ function initMap()
     // Create an main_infoWindow
     main_infoWindow = new google.maps.InfoWindow();
     main_infoWindow.addListener('closeclick', close_main_infoWindow);
-    main_infoWindow.setZIndex(2);
 
     // Create Bounds
     bounds = new google.maps.LatLngBounds();
@@ -256,6 +255,8 @@ function initMap()
     console.log("Created Google Maps");
 
     createPlaces();
+
+    main_infoWindow.setZIndex(places.length);
 }
 
 function init_drawing_manager()
@@ -538,7 +539,8 @@ function show_markers_withIn_time(response)
                     results_found++;
                     if(results_found == 1)
                         first_result_location = places[i].location;
-                    var content = '<div onclick=bring_to_front(' + i + ')>';
+                    var content = '<div class="searchWithInTime-infoWindow"';
+                    content += 'onclick="bring_to_front('+i+')">';
                     content += '<p>' + distance_text + ", ";
                     content += duration_text + '</p>\n';
                     content += '<button id="show-directions-btn" ';
