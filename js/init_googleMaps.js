@@ -53,6 +53,7 @@ var main_infoWindow;
 var mainInfoWindow_place_id;
 var search_infoWindow;
 var searchInfoWindow_place_id;
+var search_box;
 var bounds;
 var default_marker_icon;
 var hover_marker_icon;
@@ -231,9 +232,10 @@ function initMap()
     );
     zoomIn_autoComplete.bindTo('bounds', map);
 
-    var searchPlaces_autoComplete = new google.maps.places.Autocomplete(
+    /*var searchPlaces_autoComplete = new google.maps.places.Autocomplete(
         document.getElementById('searchPlaces-addressBar')
     );
+    searchPlaces_autoComplete.bindTo('bounds', map);*/
 
     init_drawing_manager();
     cancel_btn = document.getElementById('cancel-drawing-btn');
@@ -259,6 +261,11 @@ function initMap()
     createPlaces();
 
     //main_infoWindow.setZIndex(places.length+1);
+
+    search_box = new google.maps.places.SearchBox(
+        document.getElementById('searchPlaces-addressBar')
+    );
+    search_box.setBounds(map.getBounds());
 }
 
 function init_drawing_manager()
@@ -635,13 +642,17 @@ function search_otherPlaces(event=null)
 {
     if(event)
         if(event.key !== 'Enter')
+        {
+            search_box.setBounds(map.getBounds());
             return;
+        }
 
-    var address = document.getElementById('searchWithInTime-addressBar').value;
+    var address = document.getElementById('searchPlaces-addressBar').value;
     
     if(address != '')
     {
         console.log(address);
+        close_all_search_places();
     }
     else
         alert("Type in an address or place or a key word to get results.");
@@ -649,5 +660,30 @@ function search_otherPlaces(event=null)
 
 function set_searchInfoWindow(id)
 {
+    if(search_infoWindow == null)
+        search_infoWindow = new google.maps.InfoWindow();
     
+    if(search_infoWindow.marker != search_places[id].marker)
+    {
+        get_search_details();
+        if(search_infoWindow.marker != null)
+        {
+            search_infoWindow.marker.setIcon(default_marker_icon);
+            if(search_places[searchInfoWindow_place_id].infoWindow.marker != null)
+                search_places[searchInfoWindow_place_id].infoWindow.open(
+                    map,
+                    search_places[searchInfoWindow_place_id].marker
+                );
+        }
+    }
+}
+
+function close_searchInfoWindow()
+{
+
+}
+
+function get_search_details()
+{
+
 }
