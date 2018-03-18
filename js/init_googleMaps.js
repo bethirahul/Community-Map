@@ -220,7 +220,14 @@ function initMap()
     map.mapTypes.set('my_style', my_styledMapType);
     map.setMapTypeId('my_style');
 
-    map.addListener('click', close_main_infoWindow);
+    map.addListener(
+        'click',
+        function()
+        {
+            close_main_infoWindow();
+            close_searchInfoWindow();
+        }
+    );
 
     // Auto-complete
     var searchWithInTime_autoComplete = new google.maps.places.Autocomplete(
@@ -244,6 +251,10 @@ function initMap()
     // Create an main_infoWindow
     main_infoWindow = new google.maps.InfoWindow();
     main_infoWindow.addListener('closeclick', close_main_infoWindow);
+
+    search_infoWindow = new google.maps.InfoWindow();
+    search_infoWindow.setZIndex(2);
+    search_infoWindow.addListener('closeclick', close_searchInfoWindow);
 
     // Create Bounds
     bounds = new google.maps.LatLngBounds();
@@ -422,6 +433,7 @@ function set_mainInfoWindow(id)
                 main_infoWindow.setContent(content);
                 main_infoWindow.open(map, places[id].marker);
             }
+            close_searchInfoWindow();
         }
 
         streetView_service.getPanoramaByLocation(
@@ -651,9 +663,6 @@ function search_otherPlaces(event=null)
     
     if(address != '')
     {
-        console.log(address);
-        close_all_search_places();
-        
         var placesService = new google.maps.places.PlacesService(map);
         placesService.textSearch(
             {
@@ -679,16 +688,58 @@ function search_otherPlaces(event=null)
 }
 
 function set_searchInfoWindow(id)
-{
-    if(search_infoWindow == null)
-        search_infoWindow = new google.maps.InfoWindow();
-    
+{  
     if(search_infoWindow.marker != search_places[id].marker)
     {
-        searchInfoWindow_place_id = id;
-        search_infoWindow.marker = search_places[id].marker;
-
-        get_search_details();
+        var placesService = new google.maps.places.PlacesService(map);
+        placesService.getDetails(
+            { placeId: search_places[id].placeID },
+            // call-back function
+            function(result, status)
+            {
+                if(status === google.maps.places.PlacesServiceStatus.OK)
+                {
+                    //searchInfoWindow_place_id = id;
+                    search_infoWindow.marker = search_places[id].marker;
+                    var content = '<div>';
+                    if(result.name)
+                        content += '<strong>' + result.name + '</strong>';
+                    if(result.formatted_address)
+                        content += '<br/>' + result.formatted_address;
+                    if(result.formatted_phone_number)
+                        content += '<br/>' + result.formatted_phone_number;
+                    if(result.opening_hours)
+                    {
+                        content += '<br/>';
+                        for(var i=0; i<result.opening_hours.weekday_text.length;
+                                i++)
+                        {
+                            content += '<br/>';
+                            content += result.opening_hours.weekday_text[i];
+                        }
+                    }
+                    if(result.photos)
+                    {
+                        content += '<br/><br/><img src="';
+                        content += result.photos[0].getUrl(
+                            {
+                                maxHeight: 100,
+                                maxWidth: 200
+                            }
+                        );
+                        content += '">';
+                    }
+                    search_infoWindow.setContent(content);
+                    search_infoWindow.open(map, search_places[id].marker);
+                    close_main_infoWindow();
+                }
+                else
+                {
+                    close_searchInfoWindow();
+                    alert("Error in searching for other places: " + status);
+                }
+            }
+        );
     }
 }
 
@@ -696,13 +747,7 @@ function close_searchInfoWindow()
 {
     if(search_infoWindow.marker != null)
     {
-        search_infoWindow.marker.setIcon(default_marker_icon);
         search_infoWindow.marker = null;
         search_infoWindow.close();
     }
-}
-
-function get_search_details()
-{
-
 }

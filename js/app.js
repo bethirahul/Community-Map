@@ -99,8 +99,8 @@ var places = [];
 function createPlaces()
 {
     //fetch("http://localhost:8000/places/json")
-    //fetch("http://192.168.0.107:8000/places/json")
-    fetch("http://192.168.1.220:8000/places/json")
+    fetch("http://192.168.0.107:8000/places/json")
+    //fetch("http://192.168.1.220:8000/places/json")
     .then(
         function(data)
         {
@@ -163,6 +163,7 @@ function showHide_all_markers(state)
     {
         close_main_infoWindow();
         close_places_infoWindows();
+        //showHide_searchPlaces(false);
 
         if(polygon)
             polygon.setMap(null);
@@ -213,6 +214,7 @@ function start_drawing()
     close_main_infoWindow();
     for(var i=0; i<places.length; i++)
         places[i].close_infoWindow();
+    showHide_searchPlaces(false);
 }
 
 //==============================================================================
@@ -319,27 +321,39 @@ function showHide_searchWithInTime(state)
 //         S E A R C H      P L A C E S
 //==============================================================================
 
-var Search_place = function(id, placeID, name, location,  icon)
+var Search_place = function(id, result)
 {
     var self = this;
 
     self.id = id;
-    self.placeID = placeID;
-    self.name = name;
-    self.location = location;
+    self.placeID = result.place_id;
+    self.name = result.name;
+    self.location = result.geometry.location;
+    /*if(result.formatted_address)
+        self.address = result.formatted_address;
+    if(result.formatted_phone_number)
+        self.phone = result.formatted_phone_number;
+    if(result.opening_hours)
+        self.opening_hrs = result.opening_hours.weekday_text;
+    if(result.photos)
+        self.img_url = result.photos[0].getUrl(
+            {
+                maxHeight: 100,
+                maxWidth: 200
+            }
+        );*/
     self.marker = new google.maps.Marker(
         {
-            id: self.id,
+            id: self.placeID,
             position: self.location,
             map: map,
             title: self.name,
-            icon: default_marker_icon,
+            icon: create_marker_icon(result.icon, 35, 35, 0.75, 0.5),
             animation: google.maps.Animation.DROP
         }
     );
-    self.icon = icon;
 
-    self.marker.addListener(
+    /*self.marker.addListener(
         'mouseover',
         function()
         {
@@ -354,9 +368,11 @@ var Search_place = function(id, placeID, name, location,  icon)
             if(search_infoWindow.marker != self.marker)
                 this.setIcon(default_marker_icon);
         }
-    );
+    );*/
     self.marker.addListener(
         'click', function() { set_searchInfoWindow(self.id); } );
+    
+    self.marker.setVisible(true);
 }
 
 //==============================================================================
@@ -365,25 +381,24 @@ var search_places = [];
 
 function create_search_places(results)
 {
-    console.log(results);
-    bounds = new google.maps.LatLngBounds();
+    close_all_search_places();
+    var bounds = new google.maps.LatLngBounds();
     for(var i=0; i<results.length; i++)
     {
-        var icon = create_marker_icon(results[i].icon, 35, 35, 1, 0.5);
-        var new_search_place = new Search_place(
-            i,
-            results[i].id,
-            results[i].name,
-            results[i].geometry.location,
-            icon
-        );
+        var icon = create_marker_icon(results[i].icon, 35, 35, 0.75, 0.5);
+        var new_search_place = new Search_place(i, results[i]);
         search_places.push(new_search_place);
+        if(results[i].geometry.viewport)
+            bounds.union(results[i].geometry.viewport);
+        else
+            bounds.extend(results[i].geometry.location);
     }
-
+    map.fitBounds(bounds);
 }
 
 function close_all_search_places()
 {
+    close_searchInfoWindow();
     for(var i=0; i<search_places.length; i++)
         search_places[i].marker.setMap(null);
 
@@ -417,6 +432,7 @@ function showHide_searchPlaces(state)
     {
         search.style.display = 'none';
         btn.innerHTML = 'Search<br/>other places';
+        close_all_search_places();
     }
 }
 
