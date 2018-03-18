@@ -361,6 +361,11 @@ var Search_result = function(id, placeID, {lat, lng}, name)
 
 var search_places = [];
 
+function create_search_places(results)
+{
+    console.log(results);
+}
+
 function close_all_search_places()
 {
     for(var i=0; i<search_places.length; i++)

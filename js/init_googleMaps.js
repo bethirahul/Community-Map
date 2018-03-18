@@ -653,6 +653,26 @@ function search_otherPlaces(event=null)
     {
         console.log(address);
         close_all_search_places();
+        
+        var placesService = new google.maps.places.PlacesService(map);
+        placesService.textSearch(
+            {
+                query: document.getElementById("searchPlaces-addressBar").value,
+                bounds: map.getBounds()
+            },
+            // call-back function
+            function(results, status)
+            {
+                if(status === google.maps.places.PlacesServiceStatus.OK)
+                {
+                    create_search_places(results);
+                    if(search_places.length == 0)
+                        alert("No results were found in this area.");
+                }
+                else
+                    alert("Error in searching for other places: " + status);
+            }
+        );
     }
     else
         alert("Type in an address or place or a key word to get results.");
@@ -665,22 +685,26 @@ function set_searchInfoWindow(id)
     
     if(search_infoWindow.marker != search_places[id].marker)
     {
-        get_search_details();
         if(search_infoWindow.marker != null)
-        {
             search_infoWindow.marker.setIcon(default_marker_icon);
-            if(search_places[searchInfoWindow_place_id].infoWindow.marker != null)
-                search_places[searchInfoWindow_place_id].infoWindow.open(
-                    map,
-                    search_places[searchInfoWindow_place_id].marker
-                );
-        }
+        
+        searchInfoWindow_place_id = id;
+
+        search_infoWindow.marker = search_places[id].marker;
+        search_infoWindow.marker.setIcon(default_marker_icon);
+
+        get_search_details();
     }
 }
 
 function close_searchInfoWindow()
 {
-
+    if(search_infoWindow.marker != null)
+    {
+        search_infoWindow.marker.setIcon(default_marker_icon);
+        search_infoWindow.marker = null;
+        search_infoWindow.close();
+    }
 }
 
 function get_search_details()
