@@ -663,19 +663,36 @@ function search_otherPlaces(event=null)
     
     if(address != '')
     {
+        var bounds = map.getBounds();
+        var center = map.getCenter();
+        var radius = get_distance(center, bounds.getNorthEast());
+        console.log('radius = ' + radius);
+
         var placesService = new google.maps.places.PlacesService(map);
         placesService.textSearch(
             {
                 query: document.getElementById("searchPlaces-addressBar").value,
-                bounds: map.getBounds()
+                bounds: bounds
+                //location: center,
+                //radius: radius
             },
             // call-back function
-            function(results, status)
+            function(data, status)
             {
                 if(status === google.maps.places.PlacesServiceStatus.OK)
                 {
-                    create_search_places(results);
-                    if(search_places.length == 0)
+                    var results = [];
+                    var dist;
+                    for(var i=0; i<data.length; i++)
+                    {
+                        dist = get_distance(center, data[i].geometry.location);
+                        if(dist <= radius)
+                            results.push(data[i]);
+                    }
+                    
+                    if(results.length > 0)
+                        create_search_places(results);
+                    else
                         alert("No results were found in this area.");
                 }
                 else
@@ -685,6 +702,11 @@ function search_otherPlaces(event=null)
     }
     else
         alert("Type in an address or place or a key word to get results.");
+}
+
+function get_distance(a, b)
+{
+    return google.maps.geometry.spherical.computeDistanceBetween(a, b);
 }
 
 function set_searchInfoWindow(id)
