@@ -250,11 +250,11 @@ function initMap()
 
     // Marker Icons
     default_marker_icon = create_marker_icon(
-            'flag/default.png', 134, 226, 0.1, 0.04);
+            'images/marker_icons/flag/default.png', 134, 226, 0.1, 0.04);
     hover_marker_icon = create_marker_icon(
-            'flag/hover.png', 134, 226, 0.1, 0.04);
+            'images/marker_icons/flag/hover.png', 134, 226, 0.1, 0.04);
     selected_marker_icon = create_marker_icon(
-            'flag/selected.png', 134, 226, 0.1, 0.04);
+            'images/marker_icons/flag/selected.png', 134, 226, 0.1, 0.04);
     
     console.log("Created Google Maps");
 
@@ -453,11 +453,11 @@ function create_marker_icon(url, w, h, s, anchor_ratio)
     var hs = h * s;
 
     var icon = new google.maps.MarkerImage(
-        'images/marker_icons/' + url,                           // url
+        url,                                                    // url
         new google.maps.Size(ws, hs),                           // size
         new google.maps.Point(0, 0),                            // origin
         new google.maps.Point(((w-1)*s)*anchor_ratio, (h-1)*s), // anchor
-        new google.maps.Size(ws, hs)                            //scale
+        new google.maps.Size(ws, hs)                            // scale
     )
 
     return icon;
@@ -685,13 +685,8 @@ function set_searchInfoWindow(id)
     
     if(search_infoWindow.marker != search_places[id].marker)
     {
-        if(search_infoWindow.marker != null)
-            search_infoWindow.marker.setIcon(default_marker_icon);
-        
         searchInfoWindow_place_id = id;
-
         search_infoWindow.marker = search_places[id].marker;
-        search_infoWindow.marker.setIcon(default_marker_icon);
 
         get_search_details();
     }

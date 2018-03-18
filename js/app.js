@@ -99,7 +99,8 @@ var places = [];
 function createPlaces()
 {
     //fetch("http://localhost:8000/places/json")
-    fetch("http://192.168.0.107:8000/places/json")
+    //fetch("http://192.168.0.107:8000/places/json")
+    fetch("http://192.168.1.220:8000/places/json")
     .then(
         function(data)
         {
@@ -318,14 +319,14 @@ function showHide_searchWithInTime(state)
 //         S E A R C H      P L A C E S
 //==============================================================================
 
-var Search_result = function(id, placeID, {lat, lng}, name)
+var Search_place = function(id, placeID, name, location,  icon)
 {
     var self = this;
 
     self.id = id;
     self.placeID = placeID;
     self.name = name;
-    self.location = {lat, lng};
+    self.location = location;
     self.marker = new google.maps.Marker(
         {
             id: self.id,
@@ -336,6 +337,7 @@ var Search_result = function(id, placeID, {lat, lng}, name)
             animation: google.maps.Animation.DROP
         }
     );
+    self.icon = icon;
 
     self.marker.addListener(
         'mouseover',
@@ -364,6 +366,20 @@ var search_places = [];
 function create_search_places(results)
 {
     console.log(results);
+    bounds = new google.maps.LatLngBounds();
+    for(var i=0; i<results.length; i++)
+    {
+        var icon = create_marker_icon(results[i].icon, 35, 35, 1, 0.5);
+        var new_search_place = new Search_place(
+            i,
+            results[i].id,
+            results[i].name,
+            results[i].geometry.location,
+            icon
+        );
+        search_places.push(new_search_place);
+    }
+
 }
 
 function close_all_search_places()
