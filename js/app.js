@@ -164,13 +164,7 @@ function showHide_all_markers(state)
         close_main_infoWindow();
         close_places_infoWindows();
         //showHide_searchPlaces(false);
-
-        if(polygon)
-            polygon.setMap(null);
-
-        if(directionsDisplay)
-            if(directionsDisplay.getMap())
-                directionsDisplay.setMap(null);
+        close_search_by_area();
 
         for(var i=0; i<places.length; i++)
             places[i].showHide_marker(state);
@@ -212,9 +206,20 @@ function start_drawing()
     drawing_manager.setMap(map);
     //drawing_manager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
     close_main_infoWindow();
+    showHide_searchWithInTime(false);
     for(var i=0; i<places.length; i++)
         places[i].close_infoWindow();
     showHide_searchPlaces(false);
+}
+
+function close_search_by_area()
+{
+    if(polygon)
+            polygon.setMap(null);
+
+    if(directionsDisplay)
+        if(directionsDisplay.getMap())
+            directionsDisplay.setMap(null);
 }
 
 //==============================================================================
@@ -228,8 +233,7 @@ function zoomIn_to_address(event=null)
     var address_bar = document.getElementById('zoomIn-addressBar');
     if(address_bar.value != '')
     {
-        if(polygon)
-            polygon.setMap(null);
+        close_search_by_area();
         
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode(
@@ -288,6 +292,7 @@ function toggle_searchWithIn(btn)
     {
         showHide_searchWithInTime(true);
         showHide_searchPlaces(false);
+        close_search_by_area();
     }
     else
         showHide_searchWithInTime(false);
@@ -310,9 +315,7 @@ function showHide_searchWithInTime(state)
 
         close_places_infoWindows();
         
-        if(directionsDisplay)
-            if(directionsDisplay.getMap())
-                directionsDisplay.setMap(null);
+        close_search_by_area();
     }
 }
 
@@ -427,6 +430,7 @@ function showHide_searchPlaces(state)
     {
         search.style.display = 'block';
         btn.innerHTML = 'Hide Search';
+        close_search_by_area();
     }
     else
     {
